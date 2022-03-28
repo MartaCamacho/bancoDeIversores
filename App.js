@@ -1,32 +1,53 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Login from './src/screens/Login';
 import Signup from './src/screens/Signup';
+import Home from './src/screens/Home';
+import { Provider } from 'react-redux';
+import { Store } from './src/redux/store';
 
-const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
 
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator
-      initialRouteName='Login'
-      >
-        <Stack.Screen
-        name="Login"
-        component={Login}
-        options={{
-          headerShown: false
-        }}
-          />
-        <Stack.Screen
-        name="Signup"
-        component={Signup}
-          />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <Provider store={Store}>
+      <NavigationContainer>
+        <Tab.Navigator
+        initialRouteName='Login'
+        screenOptions={({route}) => ({
+            tabBarIcon: ({ focused, size, color }) => {
+              let iconName;
+              if(route.name === 'Settings') {
+                iconName = ''
+              }
+
+            }
+        })}
+        >
+          <Tab.Screen
+          name="Login"
+          component={Login}
+          options={{
+            headerShown: false
+          }}
+            />
+          <Tab.Screen
+          name="Signup"
+          component={Signup}
+          options={{
+            headerShown: false
+          }}
+            />
+          <Tab.Screen
+          name="Home"
+          component={Home}
+            />
+        </Tab.Navigator>
+      </NavigationContainer>
+    </Provider>
   );
 }
 
