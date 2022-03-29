@@ -124,9 +124,11 @@ const Signup = ({ navigation }) => {
           placeholder='Repeat your password'
         />
         {repeatPasswordError.length > 0 && errorMessage(repeatPasswordError)}
-        <Text style={{color: 'blue'}}
-          onPress={() => navigation.navigate('Login')}>
-          Already have an account? Login
+        <Text style={styles.textLink}>
+        Already have an account? <Text style={{color: 'blue'}}
+            onPress={() => navigation.navigate('Login')}>
+            Login
+          </Text>
         </Text>
         <ButtonComponent 
           title='Signup'
@@ -152,6 +154,14 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 30
   },
+  textLink: {
+    color: '#fff',
+    textAlign: 'right',
+    width: 300,
+    maxWidth: '95%',
+    marginTop: 10,
+    marginBottom: 40
+  },
   logo: {
     width: 186,
     height: 112,
@@ -159,6 +169,7 @@ const styles = StyleSheet.create({
   },
   input: {
     width: 300,
+    maxWidth: '95%',
     height: 50,
     paddingLeft: 10,
     paddingRight: 10,
@@ -171,5 +182,6 @@ const styles = StyleSheet.create({
   errorMessage: {
     color: '#B0191E',
     width: 300,
+    maxWidth: '95%',
   }
 })
