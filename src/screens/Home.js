@@ -1,7 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native';
-import {useState, useEffect} from 'react';
+import {useEffect} from 'react';
 import { useSelector } from 'react-redux';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Home = ({ navigation, route}) => {
     const { logged, user } = useSelector(state => state.useReducer);
@@ -10,16 +9,28 @@ const Home = ({ navigation, route}) => {
         if(!logged) {
             navigation.navigate('Login');
         }
-        //AsyncStorage.removeItem('userData');
     }, []);
 
   return (
-    <View>
-      <Text>Welcome, {user.userName} !</Text>
+    <View style={styles.body}>
+      <Text style={styles.title}>Welcome, {user.userName} !</Text>
     </View>
   )
 }
 
 export default Home
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  body: {
+    flex: 1,
+    alignItems: 'center',
+    color: '#fff',
+    backgroundColor: '#141414',
+  },
+  title: {
+    height: 50,
+    color: '#fff',
+    fontSize: 30,
+    marginTop: 50
+  },
+})

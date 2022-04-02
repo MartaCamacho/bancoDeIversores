@@ -73,13 +73,13 @@ const Signup = ({ navigation }) => {
   const errorMessage = (field) => <Text style={styles.errorMessage}>{field}</Text>;
 
   return (
-    <KeyboardAwareScrollView style={{backgroundColor: '#000000', flex: 1,}}>
+    <KeyboardAwareScrollView style={{backgroundColor: '#141414', flex: 1,}}>
       <View style={styles.body}>
         <Image
         style={styles.logo}
         source={require('../../assets/logo.png')}
         />
-        <Text style={styles.text}>
+        <Text style={styles.title}>
           Signup
         </Text>
         <TextInput 
@@ -93,7 +93,7 @@ const Signup = ({ navigation }) => {
         {userNameError.length > 0 && errorMessage(userNameError)}
         <TextInput 
           style={styles.input}
-          onChangeText={(value) => setEmail(value)}
+          onChangeText={(value) => setEmail(value.toLowerCase())}
           onFocus={() => setEmailError('')}
           onBlur={() => emailErrorValidation()}
           keyboardType='email-address'
@@ -147,9 +147,9 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     color: '#fff',
-    backgroundColor: '#000000',
+    backgroundColor: '#141414',
   },
-  text: {
+  title: {
     height: 50,
     color: '#fff',
     fontSize: 30

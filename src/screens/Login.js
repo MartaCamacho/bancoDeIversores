@@ -28,18 +28,16 @@ const Login = ({ navigation }) => {
       try {
         const userData = () => AsyncStorage.getItem('userData').then((result) => {
           const user = JSON.parse(result);
-          console.warn(user.email)
           if(user && user.email === email && user.password === password) {
             dispatch(setLogged(true));
             dispatch(setUser(user));
             navigation.navigate('Home'); 
           } else {
-            Alert.alert('', 'User not found')
+            Alert.alert('', 'User not found');
           }
         })
-        .catch((err) => console.warn(err))
-        userData()
-        
+        .catch((err) => console.warn(err));
+        userData();
       } catch (error) {
         console.log(error);
       }
@@ -75,7 +73,7 @@ const Login = ({ navigation }) => {
         </Text>
         <TextInput 
           style={styles.input}
-          onChangeText={(value) => setEmail(value)}
+          onChangeText={(value) => setEmail(value.toLowerCase())}
           onFocus={() => setEmailError('')}
           onBlur={() => emailErrorValidation()}
           keyboardType='email-address'
@@ -118,7 +116,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     color: '#fff',
-    backgroundColor: '#000000',
+    backgroundColor: '#141414',
   },
   text: {
     height: 50,
