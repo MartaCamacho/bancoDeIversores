@@ -1,4 +1,5 @@
 import { Dimensions } from "react-native";
+
 const { width, height } = Dimensions.get("window");
 
 export const COLORS = {
@@ -42,18 +43,19 @@ export const SIZES = {
     width,
     height
 };
+
 export const FONTS = {
-    largeTitle: { fontFamily: "Oxygen-Bold", fontSize: SIZES.largeTitle },
-    h1: { fontFamily: "Oxygen-Bold", fontSize: SIZES.h1, lineHeight: 36 },
-    h2: { fontFamily: "Oxygen-Regular", fontSize: SIZES.h2, lineHeight: 30 },
-    h3: { fontFamily: "Oxygen-Regular", fontSize: SIZES.h3, lineHeight: 22 },
-    h4: { fontFamily: "Oxygen-Regular", fontSize: SIZES.h4, lineHeight: 22 },
-    h5: { fontFamily: "Oxygen-Regular", fontSize: SIZES.h5, lineHeight: 22 },
-    body1: { fontFamily: "Oxygen-Light", fontSize: SIZES.body1, lineHeight: 36 },
-    body2: { fontFamily: "Oxygen-Light", fontSize: SIZES.body2, lineHeight: 30 },
-    body3: { fontFamily: "Oxygen-Light", fontSize: SIZES.body3, lineHeight: 22 },
-    body4: { fontFamily: "Oxygen-Light", fontSize: SIZES.body4, lineHeight: 22 },
-    body5: { fontFamily: "Oxygen-Light", fontSize: SIZES.body5, lineHeight: 22 },
+    largeTitle: { fontFamily: "Roboto-Black", fontSize: SIZES.largeTitle },
+    h1: { fontFamily: "Roboto-Black", fontSize: SIZES.h1, lineHeight: 36 },
+    h2: { fontFamily: "Roboto-Bold", fontSize: SIZES.h2, lineHeight: 30 },
+    h3: { fontFamily: "Roboto-Bold", fontSize: SIZES.h3, lineHeight: 22 },
+    h4: { fontFamily: "Roboto-Bold", fontSize: SIZES.h4, lineHeight: 22 },
+    h5: { fontFamily: "Roboto-Bold", fontSize: SIZES.h5, lineHeight: 22 },
+    body1: { fontFamily: "Roboto-Regular", fontSize: SIZES.body1, lineHeight: 36 },
+    body2: { fontFamily: "Roboto-Regular", fontSize: SIZES.body2, lineHeight: 30 },
+    body3: { fontFamily: "Roboto-Regular", fontSize: SIZES.body3, lineHeight: 22 },
+    body4: { fontFamily: "Roboto-Regular", fontSize: SIZES.body4, lineHeight: 22 },
+    body5: { fontFamily: "Roboto-Regular", fontSize: SIZES.body5, lineHeight: 22 },
 };
 
 const appTheme = { COLORS, SIZES, FONTS };

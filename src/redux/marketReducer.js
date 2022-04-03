@@ -1,4 +1,4 @@
-import * as marketActions from "./actions";
+import * as marketActions from "./marketActions";
 
 const initialState = {
     myHoldings: [],

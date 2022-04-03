@@ -12,9 +12,9 @@ export const getHoldingsBegin = () => ({
     type: GET_HOLDINGS_BEGIN
 });
 
-export const getHoldingsSuccess = myholdings => ({
+export const getHoldingsSuccess = myHoldings => ({
     type: GET_HOLDINGS_SUCCESS,
-    payload: {myholdings}
+    payload: {myHoldings}
 });
 
 export const getHoldingsFailure = error => ({
@@ -37,13 +37,13 @@ export const getHoldings = (holdings=[], currency = 'usd', orderBy = 'market_cap
                 Accept: 'application/json'
             }
         }).then((res) => {
-            if(res.state == 200) {
+            if(res.status == 200) {
                 const myHoldings = res.data.map((item) => {
                     // Retrieve our saved coins
                     const coin = holdings.find(a => a.id == item.id);
-
                     // Price from 7 days ago
                     const price7d = item.current_price / (1 + item.price_change_percentage_7d_in_currency * 0.01);
+                    
                     return {
                         id: item.id,
                         symbol: item.symbol,
@@ -53,9 +53,11 @@ export const getHoldings = (holdings=[], currency = 'usd', orderBy = 'market_cap
                         qty: coin.qty,
                         total: coin.qty * item.current_price,
                         price_change_percentage_7d_in_currency: item.price_change_percentage_7d_in_currency,
-                        holding_value_chage_7d: (item.current_price / price7d) * coin.qty,
+                        holding_value_change_7d: (item.current_price / price7d) * coin.qty,
                         sparkline_in_7d: {
-                            value: item.sparkline_in_7d.price.map((price => price * coin.qty))
+                            value: item.sparkline_in_7d.price.map((price) => {
+                                return price * coin.qty;
+                            })
                         }
                     };
                 });
@@ -99,7 +101,7 @@ export const getCoinMarket = (currency = 'usd', orderBy = 'market_cap_desc', spa
                 Accept: 'application/json'
             }
         }).then((res) => {
-            if(res.state == 200) {
+            if(res.status == 200) {
                 dispatch(getCoinMarketSuccess(res.data));
             } else {
                 dispatch(getCoinMarketFailure(res.data));

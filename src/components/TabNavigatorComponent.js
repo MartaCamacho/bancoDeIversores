@@ -15,6 +15,7 @@ const TabNavigatorComponent = () => {
   return (
     <Tab.Navigator
             screenOptions={{
+                headerStyle: { height: 0 },
                 tabBarShowLabel: false,
                 tabBarStyle: {
                     backgroundColor: COLORS.primary,

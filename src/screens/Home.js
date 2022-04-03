@@ -5,24 +5,44 @@ import { getHoldings, getCoinMarket } from '../redux/marketActions';
 import { useFocusEffect } from '@react-navigation/native';
 
 import { SIZES, COLORS, FONTS, icons } from '../../constants';
+import { BalanceInfo } from '../components';
 
-const Home = ({ navigation, getHoldings, getCoinMarket, myHoldings, coins}) => {
+const Home = ({ navigation, getHoldings, getCoinMarket, coins}) => {
     const { logged, user } = useSelector(state => state.useReducer);
+    const { myHoldings } = useSelector(state => state.marketReducer);
 
     useEffect(() => {
-        if(!logged) {
+        /* if(!logged) {
             navigation.navigate('Login');
-        }
+        } */
     }, []);
 
     useFocusEffect(useCallback(() => {
-        getHoldings(holdings = user.holdings)
-        getCoinMarket()
+        getHoldings(holdings = user.holdings);
+        getCoinMarket();
     }, []));
+
+    const totalWallet = myHoldings.reduce((a, b) => a + (b.total || 0), 0);
+
+    const valueChange = myHoldings.reduce((a, b) => a + (b.holding_value_change_7d || 0), 0);
+    const percChange = valueChange / (totalWallet - valueChange) * 100;
+
+    const renderWalletInfoSection = () => {
+      return <View style={styles.walletContainer}>
+              <BalanceInfo
+                title='Your Wallet'
+                displayAmount={totalWallet}
+                changePct={percChange}
+                containerStyle={{
+                  marginTop: 50
+                }}
+              />
+            </View>
+    }
 
   return (
     <View style={styles.body}>
-      <Text style={styles.title}>Welcome, {user.userName} !</Text>
+    {renderWalletInfoSection()}
     </View>
   )
 }
@@ -50,14 +70,12 @@ export default connect(mapStateToProps, mapDispatchToProps)(Home)
 const styles = StyleSheet.create({
   body: {
     flex: 1,
-    alignItems: 'center',
-    color: '#fff',
-    backgroundColor: '#141414',
+    backgroundColor: COLORS.black,
   },
-  title: {
-    height: 50,
-    color: '#fff',
-    fontSize: 30,
-    marginTop: 50
-  },
+  walletContainer: {
+    paddingHorizontal: SIZES.padding,
+    borderBottomLeftRadius: 25,
+    borderBottomRightRadius: 25,
+    backgroundColor: COLORS.gray
+  }
 })
