@@ -1,8 +1,12 @@
 import { StyleSheet, Text, View } from 'react-native';
-import {useEffect} from 'react';
-import { useSelector } from 'react-redux';
+import {useEffect, useCallback} from 'react';
+import { useSelector, connect } from 'react-redux';
+import { getHoldings, getCoinMarket } from '../redux/marketActions';
+import { useFocusEffect } from '@react-navigation/native';
 
-const Home = ({ navigation, route}) => {
+import { SIZES, COLORS, FONTS, icons } from '../../constants';
+
+const Home = ({ navigation, getHoldings, getCoinMarket, myHoldings, coins}) => {
     const { logged, user } = useSelector(state => state.useReducer);
 
     useEffect(() => {
@@ -11,6 +15,11 @@ const Home = ({ navigation, route}) => {
         }
     }, []);
 
+    useFocusEffect(useCallback(() => {
+        getHoldings(holdings = user.holdings)
+        getCoinMarket()
+    }, []));
+
   return (
     <View style={styles.body}>
       <Text style={styles.title}>Welcome, {user.userName} !</Text>
@@ -18,7 +27,25 @@ const Home = ({ navigation, route}) => {
   )
 }
 
-export default Home
+function mapStateToProps(state) {
+  return {
+    myHoldings: state.marketReducer.myHoldings,
+    coins: state.marketReducer.coins
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    getHoldings: (holdings, currency, coinList, orderBy, sparkLine, priceChangePerc, perPage, page) => {
+      return dispatch(getHoldings(holdings, currency, coinList, orderBy, sparkLine, priceChangePerc, perPage, page))
+    },
+    getCoinMarket: (currency, coinList, orderBy, sparkLine, priceChangePerc, perPage, page) => {
+      return dispatch(getCoinMarket( currency, coinList, orderBy, sparkLine, priceChangePerc, perPage, page))
+    }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home)
 
 const styles = StyleSheet.create({
   body: {

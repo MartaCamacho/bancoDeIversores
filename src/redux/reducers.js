@@ -2,7 +2,22 @@ import { SET_USER_LOGGED, SET_USER } from "./actions";
 
 const initialState = {
     logged: false,
-    user: ''
+    user: {
+        name: 'Marta',
+        email: 'm@c.com',
+        holdings: [{
+            id: "bitcoin",
+            qty: 888
+        },
+        {
+            id: "ethereum",
+            qty: 188
+        },
+        {
+            id: "dogecoin",
+            qty: 88888
+        }]
+    }
 };
 
 function useReducer(state = initialState, action) {

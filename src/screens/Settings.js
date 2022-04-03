@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, StatusBar } from 'react-native';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setLogged, setUser } from '../redux/actions';
@@ -6,7 +6,6 @@ import { setLogged, setUser } from '../redux/actions';
 const Settings = ({navigation}) => {
   const dispatch = useDispatch();
   const { logged, user } = useSelector(state => state.useReducer);
-  console.warn(logged, user, 'eyy')
 
   const logOut = () => {
     dispatch(setLogged(false));
