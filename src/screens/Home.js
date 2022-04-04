@@ -6,6 +6,7 @@ import { useFocusEffect } from '@react-navigation/native';
 
 import { SIZES, COLORS, FONTS, icons } from '../../constants';
 import { BalanceInfo } from '../components';
+import { Chart } from '../components/Chart';
 
 const Home = ({ navigation, getHoldings, getCoinMarket, coins}) => {
     const { logged, user } = useSelector(state => state.useReducer);
@@ -36,6 +37,10 @@ const Home = ({ navigation, getHoldings, getCoinMarket, coins}) => {
                 containerStyle={{
                   marginTop: 50
                 }}
+              />
+              <Chart 
+                containerStyle={{marginTop: SIZES.padding * 2}}
+                chartPrices={coins[0]?.sparkline_in_7d?.price}
               />
             </View>
     }
