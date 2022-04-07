@@ -9,21 +9,21 @@ const Stack = createStackNavigator();
 
 const App = () => {
     return (
-      <Provider store={Store}>
-        <NavigationContainer>
-            <Stack.Navigator
-                screenOptions={{
-                    headerShown: false
-                }}
-                initialRouteName={'MainLayout'}
-            >
-                <Stack.Screen
-                    name="MainLayout"
-                    component={Tabs}
-                />
-            </Stack.Navigator>
-        </NavigationContainer>
-      </Provider>
+        <Provider store={Store}>
+            <NavigationContainer>
+                <Stack.Navigator
+                    screenOptions={{
+                        headerShown: false
+                    }}
+                    initialRouteName={'MainLayout'}
+                >
+                    <Stack.Screen
+                        name="MainLayout"
+                        component={Tabs}
+                    />
+                </Stack.Navigator>
+            </NavigationContainer>
+        </Provider>
     )
 }
 

@@ -6,7 +6,7 @@ import { useFocusEffect } from '@react-navigation/native';
 
 import { SIZES, COLORS, FONTS, icons } from '../../constants';
 import { BalanceInfo } from '../components';
-import { Chart } from '../components/Chart';
+import { Chart } from '../components';
 
 const Home = ({ navigation, getHoldings, getCoinMarket, coins}) => {
     const { logged, user } = useSelector(state => state.useReducer);
