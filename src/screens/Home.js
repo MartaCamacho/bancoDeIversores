@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native';
-import {useEffect, useCallback} from 'react';
+import {useEffect, useCallback, useState} from 'react';
 import { useSelector, connect } from 'react-redux';
 import { getHoldings, getCoinMarket } from '../redux/marketActions';
 import { useFocusEffect } from '@react-navigation/native';
@@ -7,10 +7,12 @@ import { useFocusEffect } from '@react-navigation/native';
 import { SIZES, COLORS, FONTS, icons } from '../../constants';
 import { BalanceInfo } from '../components';
 import { Chart } from '../components';
+import TopCryptoCurrency from '../components/TopCryptoCurrency';
 
 const Home = ({ navigation, getHoldings, getCoinMarket, coins}) => {
     const { logged, user } = useSelector(state => state.useReducer);
     const { myHoldings } = useSelector(state => state.marketReducer);
+    const [selectedCoin, setSelectedCoin] = useState(null);
 
     useEffect(() => {
         /* if(!logged) {
@@ -29,20 +31,25 @@ const Home = ({ navigation, getHoldings, getCoinMarket, coins}) => {
     const percChange = valueChange / (totalWallet - valueChange) * 100;
 
     const renderWalletInfoSection = () => {
-      return <View style={styles.walletContainer}>
-              <BalanceInfo
-                title='Your Wallet'
-                displayAmount={totalWallet}
-                changePct={percChange}
-                containerStyle={{
-                  marginTop: 50
-                }}
-              />
-              <Chart 
-                containerStyle={{marginTop: SIZES.padding * 2}}
-                chartPrices={coins[0]?.sparkline_in_7d?.price}
-              />
-            </View>
+      return <View>
+                  <View style={styles.walletContainer}>
+                    <BalanceInfo
+                      title='Your Wallet'
+                      displayAmount={totalWallet}
+                      changePct={percChange}
+                      containerStyle={{
+                        marginTop: 50
+                      }}
+                    />
+                  </View>
+                    <Chart 
+                      containerStyle={{marginTop: SIZES.padding * 2}}
+                      chartPrices={selectedCoin ? selectedCoin?.sparkline_in_7d?.price : 
+                      coins[0]?.sparkline_in_7d?.price}
+                    />
+                    <TopCryptoCurrency coins={coins} setSelectedCoin={setSelectedCoin} />
+              </View>
+      
     }
 
   return (

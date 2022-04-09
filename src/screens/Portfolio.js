@@ -1,10 +1,17 @@
-import React from 'react';
+import { useState } from 'react';
 import {
     View,
-    Text
+    Text,
+    TouchableOpacity,
+    FlatList,
+    Image
 } from 'react-native';
+import { connect } from 'react-redux';
+import { getHoldings } from '../redux/marketActions';
+import { useFocusEffect } from '@react-navigation/native';
 
 const Portfolio = () => {
+
     return (
         <View>
             <Text>Portfolio</Text>
