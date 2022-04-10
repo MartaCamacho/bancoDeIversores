@@ -5,8 +5,7 @@ import { getHoldings, getCoinMarket } from '../redux/marketActions';
 import { useFocusEffect } from '@react-navigation/native';
 
 import { SIZES, COLORS, FONTS, icons } from '../../constants';
-import { BalanceInfo } from '../components';
-import { Chart } from '../components';
+import { BalanceInfo, Chart } from '../components';
 import TopCryptoCurrency from '../components/TopCryptoCurrency';
 
 const Home = ({ navigation, getHoldings, getCoinMarket, coins}) => {

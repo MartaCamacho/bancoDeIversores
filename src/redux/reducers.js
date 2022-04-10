@@ -16,6 +16,10 @@ const initialState = {
         {
             id: "dogecoin",
             qty: 88888
+        },
+        {
+            id: "litecoin",
+            qty: 66
         }]
     }
 };
