@@ -7,7 +7,7 @@ import {
     Image,
     StyleSheet
 } from 'react-native';
-import { useSelector, useDispatch, connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { getHoldings } from '../redux/marketActions';
 import { useFocusEffect } from '@react-navigation/native';
 import { BalanceInfo, Chart } from '../components';

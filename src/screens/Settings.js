@@ -1,7 +1,11 @@
-import { StyleSheet, Text, View, StatusBar } from 'react-native';
+import { StyleSheet, Text, View, StatusBar, TouchableOpacity, ScrollView, Image, Switch } from 'react-native';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setLogged, setUser } from '../redux/actions';
+
+import HeaderBar from '../components/HeaderBar';
+import { SIZES, COLORS, FONTS, icons } from '../../constants';
+import { Header } from '@react-navigation/stack';
 
 const Settings = ({navigation}) => {
   const dispatch = useDispatch();
@@ -13,14 +17,25 @@ const Settings = ({navigation}) => {
     navigation.navigate('Login');
   };
 
-  const editUser = () => {
-    console.warn('edit')
+  const SectionTitle = ({ title }) => {
+    return (
+      <View style={styles.sectionTitle}>
+        <Text style={styles.sectionTitleText}>
+          {title}
+        </Text>
+      </View>
+    )
+  }
+
+  const Setting = () => {
+    return (
+      <View></View>
+    )
   }
 
   return (
     <View style={styles.body}>
-      <StatusBar backgroundColor="#141414" />
-      <Text style={styles.title}>
+      {/* <Text style={styles.title}>
         Settings
       </Text>
       <Text 
@@ -28,13 +43,28 @@ const Settings = ({navigation}) => {
       onPress={() => logOut()}
       >
         Log out
-      </Text>
-      <Text 
-      style={styles.item}
-      onPress={() => editUser()}
-      >
-        Edit user
-      </Text>
+      </Text> */}
+
+      <View style={styles.profileContainer}>
+        <HeaderBar title="Settings" />
+        <ScrollView>
+          <View style={styles.emailContainer}>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.email}>
+                {user.email}
+              </Text>
+            </View>
+          </View>
+          <SectionTitle title="APP" />
+          <Setting 
+            title="Launch Screen"
+            value="Home"
+            type="button"
+            onPress={() => console.log('pressed')}
+          />
+        </ScrollView>
+      </View>
+      
     </View>
   )
 }
@@ -44,16 +74,23 @@ export default Settings
 const styles = StyleSheet.create({
     body: {
       flex: 1,
-      backgroundColor: '#141414',
+      backgroundColor: COLORS.black,
     },
-    title: {
-      marginTop: 20,
-      height: 50,
-      color: '#fff',
-      fontSize: 30
+    profileContainer: {
+      paddingHorizontal: SIZES.padding,
+      backgroundColor: COLORS.black
     },
-    item: {
-      color: '#fff',
-
+    emailContainer: {
+      flexDirection: 'row',
+      marginTop: SIZES.radius
+    },
+    email: {
+      color: COLORS.white,
+      ...FONTS.h3
+    },
+    sectionTitle: {marginTop: SIZES.padding},
+    sectionTitleText: {
+      color: COLORS.lightGray3,
+      ...FONTS.h4
     }
 })
