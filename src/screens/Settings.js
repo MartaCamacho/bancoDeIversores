@@ -1,15 +1,15 @@
 import { StyleSheet, Text, View, StatusBar, TouchableOpacity, ScrollView, Image, Switch } from 'react-native';
-import React from 'react';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setLogged, setUser } from '../redux/actions';
 
 import HeaderBar from '../components/HeaderBar';
 import { SIZES, COLORS, FONTS, icons } from '../../constants';
-import { Header } from '@react-navigation/stack';
 
 const Settings = ({navigation}) => {
   const dispatch = useDispatch();
   const { logged, user } = useSelector(state => state.useReducer);
+  const [switchItem, setSwitchItem] = useState(false);
 
   const logOut = () => {
     dispatch(setLogged(false));
@@ -27,10 +27,27 @@ const Settings = ({navigation}) => {
     )
   }
 
-  const Setting = () => {
-    return (
-      <View></View>
-    )
+  const Setting = ({ title, value, type, onPress}) => {
+    return type === 'button' ? 
+    <TouchableOpacity style={styles.settingIntemContainer} onPress={onPress}>
+      <Text style={styles.settingItemLeftText}>{title}</Text>
+      <View style={styles.settingItemRightText}>
+        <Text style={styles.settingItemRightGray}>
+          {value}
+        </Text>
+        <Image
+        source={icons.rightArrow}
+        style={styles.settingItemRightArrow} />
+      </View>
+    </TouchableOpacity> 
+    : 
+    <View style={styles.switch}>
+      <Text style={styles.settingItemLeftText}>{title}</Text>
+      <Switch
+        value={value}
+        onValueChange={(value) => onPress(value)}
+      />
+    </View>
   }
 
   return (
@@ -59,6 +76,46 @@ const Settings = ({navigation}) => {
           <Setting 
             title="Launch Screen"
             value="Home"
+            type="button"
+            onPress={() => console.log('pressed')}
+          />
+          <Setting 
+            title="Appearance"
+            value="Dark"
+            type="button"
+            onPress={() => console.log('pressed')}
+          />
+
+          <SectionTitle title="ACCOUNT" />
+          <Setting 
+            title="Payment Currency"
+            value="USD"
+            type="button"
+            onPress={() => console.log('pressed')}
+          />
+          <Setting 
+            title="Language"
+            value="English"
+            type="button"
+            onPress={() => console.log('pressed')}
+          />
+
+          <SectionTitle title="SECURITY" />
+          <Setting 
+            title="dummy text"
+            value={switchItem}
+            type="switch"
+            onPress={(value) => setSwitchItem(value)}
+          />
+          <Setting 
+            title="Password Settings"
+            value=""
+            type="button"
+            onPress={() => console.log('pressed')}
+          />
+          <Setting 
+            title="Change Password"
+            value=""
             type="button"
             onPress={() => console.log('pressed')}
           />
@@ -92,5 +149,34 @@ const styles = StyleSheet.create({
     sectionTitleText: {
       color: COLORS.lightGray3,
       ...FONTS.h4
+    },
+    settingIntemContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      height: 50
+    },
+    settingItemLeftText: {
+      flex: 1,
+      color: COLORS.white,
+      ...FONTS.h3
+    },
+    settingItemRightText: {
+      flexDirection: 'row',
+      alignItems: 'center'
+    },
+    settingItemRightGray: {
+      marginRight: SIZES.radius,
+      color: COLORS.lightGray3,
+      ...FONTS.h3
+    },
+    settingItemRightArrow: {
+      height: 15,
+      width: 15,
+      tintColor: COLORS.white
+    },
+    switch: {
+      flexDirection: 'row',
+      height: 50,
+      alignItems: 'center'
     }
 })
