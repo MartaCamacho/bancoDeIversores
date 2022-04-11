@@ -55,22 +55,6 @@ const TabNavigatorComponent = () => {
                 }}
             />
             <Tab.Screen
-                name="Trade"
-                component={Home}
-                options={{
-                  tabBarIcon: ({focused}) => {
-                    return (
-                      <TabIcon 
-                        focused={focused}
-                        icon={icons.trade}
-                        label='Trade'
-                        isTrade={true}
-                      />
-                    )
-                  }
-                }}
-            />
-            <Tab.Screen
                 name="Market"
                 component={Market}
                 options={{

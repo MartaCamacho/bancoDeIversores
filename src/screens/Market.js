@@ -183,22 +183,22 @@ const Market = () => {
                                             <Text style={styles.figuresItem}>
                                             $ {item.current_price}
                                             </Text>
-                                            <View style={styles.figuresContainer}>
-                                            {
-                                            item.price_change_percentage_7d_in_currency != 0 && <Image 
-                                            source={icons.upArrow}
-                                            style={{
-                                                height: 10,
-                                                width: 10,
-                                                tintColor: priceColor,
-                                                transform: item.price_change_percentage_7d_in_currency > 0 ? 
-                                                [{rotate: '45deg'}] : [{rotate: '125deg'}]
-                                            }}
-                                            />
-                                            }
-                                            <Text style={[{color: priceColor}, styles.figuresPercentage]}>
-                                            {item.price_change_percentage_7d_in_currency.toFixed(2)}%
-                                            </Text>
+                                            <View style={[styles.figuresContainer, {flexDirection: 'row'}]}>
+                                                {
+                                                item.price_change_percentage_7d_in_currency != 0 && <Image 
+                                                source={icons.upArrow}
+                                                style={{
+                                                    height: 10,
+                                                    width: 10,
+                                                    tintColor: priceColor,
+                                                    transform: item.price_change_percentage_7d_in_currency > 0 ? 
+                                                    [{rotate: '45deg'}] : [{rotate: '125deg'}]
+                                                }}
+                                                />
+                                                }
+                                                <Text style={[{color: priceColor}, styles.figuresPercentage]}>
+                                                {item.price_change_percentage_7d_in_currency.toFixed(2)}%
+                                                </Text>
                                             </View>
                                     </View>
                                 </View>

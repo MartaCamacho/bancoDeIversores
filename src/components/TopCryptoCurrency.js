@@ -1,31 +1,74 @@
-import { View, Text, FlatList, TouchableOpacity, Image } from 'react-native';
-import React from 'react';
+import { View, Text, FlatList, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import {useState} from 'react';
 import { SIZES, COLORS, FONTS, icons } from '../../constants';
+import HeaderBar from './HeaderBar';
+import TextButton from './TextButton';
+import axios from 'axios';
 
-const TopCryptoCurrency = ({coins, setSelectedCoin}) => {
-  return (
+const TopCryptoCurrency = ({ coins, setSelectedCoin }) => {
+  const [coinList, setCoinList] = useState(coins);
+  const [currency, setCurrency] = useState('$');
+  const [currentFilter, setCurrentFilter] = useState('market_cap_desc');
+
+  const orderList = (currency, order, page) => {
+    const perPage = 25;
+    const baseUrl = `https://api.coingecko.com/api/v3/coins/markets?vs_currency=${currency || 'usd'}&order=${order || 'market_cap_desc'}&per_page=${perPage}&page=${page || 1}&sparkline=false`;
+    axios
+      .get(baseUrl)
+      .then((res) => {
+        if (page > 1) {
+          setCoinList([...coinList, ...res.data]);
+        } else {
+          setCoinList(res.data);
+        }
+      })
+      .catch((error) => {
+        console.error(error, 'Axios GET request failed');
+      });
+  }
+
+  const selectedFilter = (filter) => {
+    orderList( null, filter, null );
+    return setCurrentFilter(filter);
+  };
+
+  const renderFilterButtons = () => {
+    return(
+      <View style={styles.buttonsContainer}>
+          <TextButton label="EUR" onPress={() => [orderList('eur'), setCurrency('€')]} />
+          <TextButton 
+          label="Price"
+          onPress={() => selectedFilter('current_price')}
+          containerStyle={{marginLeft: SIZES.base}} 
+          />
+          <TextButton 
+          label="Market cap"
+          onPress={() => selectedFilter('market_cap_asc')}
+          containerStyle={{marginLeft: SIZES.base}} 
+          />
+          <TextButton 
+          label="Volume"
+          onPress={() => selectedFilter('total_volume')}
+          containerStyle={{marginLeft: SIZES.base}} 
+          />
+      </View>
+    )
+  }
+
+  return (<>
+              <HeaderBar title="Top Crypto"/>
+              {renderFilterButtons()}
                 <FlatList
-                      data={coins}
+                      data={coinList}
                       keyExtractor={item => item.id}
                       contentContainerStyle={{
                         marginTop: 30,
                         paddingHorizontal: SIZES.padding
                       }}
-                      ListHeaderComponent={
-                        <View style={{ marginBottom: SIZES.radius }}>
-                          <Text style={{
-                            color: COLORS.white, 
-                            ...FONTS.h3, 
-                            fontSize: 18
-                          }}>
-                            Top CryptoCurrency
-                          </Text>
-                        </View>
-                      }
                       renderItem={({item}) => {
 
-                        let priceColor = item.price_change_percentage_7d_in_currency == 0 ? COLORS.lightGray3 :
-                        item.price_change_percentage_7d_in_currency > 0 ? COLORS.lightGreen : COLORS.red;
+                        let priceColor = item.price_change_percentage_24h == 0 ? COLORS.lightGray3 :
+                        item.price_change_percentage_24h > 0 ? COLORS.lightGreen : COLORS.red;
 
                         return (
                           <TouchableOpacity style={{
@@ -55,7 +98,7 @@ const TopCryptoCurrency = ({coins, setSelectedCoin}) => {
                                 textAlign: 'right',
                                 color: COLORS.white,
                                 ...FONTS.h4 }}>
-                                $ {item.current_price}
+                                {currency} {item.current_price}
                               </Text>
                               <View style={{
                                 flexDirection: 'row',
@@ -64,13 +107,13 @@ const TopCryptoCurrency = ({coins, setSelectedCoin}) => {
                               }}
                               >
                                 {
-                                  item.price_change_percentage_7d_in_currency != 0 && <Image 
+                                  item.price_change_percentage_24h != 0 && <Image 
                                   source={icons.upArrow}
                                   style={{
                                     height: 10,
                                     width: 10,
                                     tintColor: priceColor,
-                                    transform: item.price_change_percentage_7d_in_currency > 0 ? 
+                                    transform: item.price_change_percentage_24h > 0 ? 
                                     [{rotate: '45deg'}] : [{rotate: '125deg'}]
                                   }}
                                 />
@@ -81,7 +124,7 @@ const TopCryptoCurrency = ({coins, setSelectedCoin}) => {
                                   ...FONTS.body5,
                                   lineHeight: 15
                                 }}>
-                                  {item.price_change_percentage_7d_in_currency.toFixed(2)}%
+                                  {item?.price_change_percentage_24h?.toFixed(2)}%
                                 </Text>
                               </View>
                             </View>
@@ -92,7 +135,16 @@ const TopCryptoCurrency = ({coins, setSelectedCoin}) => {
                         <View style={{ marginBottom: 50 }}></View>
                       }
                     />
+              </>
   )
 }
 
 export default TopCryptoCurrency
+
+const styles = StyleSheet.create({
+  buttonsContainer: {
+    flexDirection: 'row',
+    marginTop: SIZES.radius,
+    marginHorizontal: SIZES.radius
+},
+})

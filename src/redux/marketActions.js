@@ -22,7 +22,7 @@ export const getHoldingsFailure = error => ({
     payload: {error}
 });
 
-export const getHoldings = (holdings=[], currency = 'usd', orderBy = 'market_cap_desc', sparkline = true, priceChangePerc = '7d', perPage = 10, page = 1) => {
+export const getHoldings = (holdings=[], currency = 'usd', orderBy = 'market_cap_desc', sparkline = true, priceChangePerc = '7d', perPage = 25, page = 1) => {
 
     return dispatch => {
         dispatch(getHoldingsBegin());
@@ -88,7 +88,7 @@ export const getCoinMarketFailure = error => ({
     payload: {error}
 });
 
-export const getCoinMarket = (currency = 'usd', orderBy = 'market_cap_desc', sparkline = true, priceChangePerc = '7d', perPage = 10, page = 1) => {
+export const getCoinMarket = (currency = 'usd', orderBy = 'market_cap_desc', sparkline = true, priceChangePerc = '7d', perPage = 25, page = 1) => {
 
     return dispatch => {
         dispatch(getCoinMarketBegin());
