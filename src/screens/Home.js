@@ -3,6 +3,7 @@ import {useEffect, useCallback} from 'react';
 import { useSelector, connect } from 'react-redux';
 import { getHoldings, getCoinMarket } from '../redux/marketActions';
 import { useFocusEffect } from '@react-navigation/native';
+import { CommonActions } from '@react-navigation/native';
 
 import { SIZES, COLORS, FONTS, icons } from '../../constants';
 import TopCryptoCurrency from '../components/TopCryptoCurrency';
@@ -21,10 +22,20 @@ const Home = ({ navigation, getHoldings, getCoinMarket, coins}) => {
         getCoinMarket();
     }, []));
 
+    const seeCryptoDetails = (name, symbol, id) => {
+      navigation.dispatch(
+        CommonActions.navigate({
+          name: 'CryptoDetails',
+          params: {
+            coin: {name: name, symbol: symbol, id: id},
+          },
+        })
+      );
+    }
 
   return (
     <View style={styles.body}>
-      <TopCryptoCurrency coins={coins} orderList={getCoinMarket}/>
+      <TopCryptoCurrency coins={coins} userCurrency={user.currency} seeCryptoDetails={seeCryptoDetails}/>
     </View>
   )
 }

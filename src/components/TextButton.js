@@ -1,9 +1,9 @@
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { COLORS, FONTS, SIZES } from '../../constants';
 
-const TextButton = ({ label, containerStyle, onPress }) => {
+const TextButton = ({ label, containerStyle, onPress, active }) => {
   return (
-    <TouchableOpacity style={[styles.container, {...containerStyle}]} onPress={onPress}>
+    <TouchableOpacity style={[styles.container, {...containerStyle}, active && styles.buttonActive]} onPress={onPress}>
         <Text style={styles.text}>
             {label}
         </Text>
@@ -25,5 +25,9 @@ const styles = StyleSheet.create({
     text: {
         color: COLORS.white,
         ...FONTS.h3
+    },
+    buttonActive: {
+        backgroundColor: COLORS.lightGray3,
+        fontWeight: 'bold'
     }
 })

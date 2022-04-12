@@ -5,6 +5,7 @@ const initialState = {
     user: {
         name: 'Marta',
         email: 'm@c.com',
+        currency: 'eur',
         holdings: [{
             id: "bitcoin",
             qty: 888

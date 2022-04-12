@@ -1,14 +1,24 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createStackNavigator } from "@react-navigation/stack";
 import Home from '../screens/Home';
 import Portfolio from '../screens/Portfolio';
 import Market from '../screens/Market';
 import Settings from '../screens/Settings';
-import Login from '../screens/Login';
-import Signup from '../screens/Signup';
 import { TabIcon } from '../components';
 import { COLORS, icons } from "../../constants";
+import CoinDetails from '../screens/CoinDetails';
 
 const Tab = createBottomTabNavigator();
+const CyptoStack = createStackNavigator();
+
+const CryptoDetailsScreen = () => {
+  return (
+  <CyptoStack.Navigator>
+    <CyptoStack.Screen name="Home" component={Home} />
+    <CyptoStack.Screen name="CryptoDetails" component={CoinDetails} />
+  </CyptoStack.Navigator>
+  )
+}
 
 const TabNavigatorComponent = () => {
   
@@ -26,7 +36,7 @@ const TabNavigatorComponent = () => {
         >
             <Tab.Screen
                 name="Home"
-                component={Home}
+                component={CryptoDetailsScreen}
                 options={{
                   tabBarIcon: ({focused}) => {
                     return (
@@ -84,14 +94,7 @@ const TabNavigatorComponent = () => {
                   }
                 }}
             />
-            {/* <Tab.Screen
-                name="Login"
-                component={Login}
-            />
-            <Tab.Screen
-                name="Signup"
-                component={Signup}
-            /> */}
+            
         </Tab.Navigator>
   )
 }
