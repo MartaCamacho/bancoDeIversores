@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, ActivityIndicator, Image } from 'react-native';
 import {useEffect, useState} from 'react';
 import HeaderBar from '../components/HeaderBar';
 import axios from 'axios';
@@ -11,20 +11,23 @@ const CoinDetails = ({ route }) => {
     const [coinDetails, setCoinDetails] = useState([]);
     const [coinPrices, setCoinPrices] = useState([]);
     const [timeframe, setTimeframe] = useState(86400);
-
+    const [chartLoading, setChartLoading] = useState(true);
+    const [detailsLoading, setDetailsLoading] = useState(true);
 
     useEffect(() => {
         getPriceInfo();
-
+        setDetailsLoading(true);
       axios.get(`https://api.coingecko.com/api/v3/coins/${route.params.coin.id}?developer_data=false`)
       .then((response) => {
         setCoinDetails(response.data);
+        setDetailsLoading(false)
       })
       .catch((error) => console.log(error));
 
     }, []);
 
     const getPriceInfo = () => {
+        setChartLoading(true)
         const now = Math.round((new Date()).getTime() / 1000);
         axios.get(`https://api.coingecko.com/api/v3/coins/${route.params.coin.id}/market_chart/range?vs_currency=${route.params.coin.currency}&from=${now - timeframe}&to=${now}`)
         .then((response) => {
@@ -35,6 +38,7 @@ const CoinDetails = ({ route }) => {
               return data;
             };
           setCoinPrices(transformPrices());
+          setChartLoading(false)
         })
         .catch((error) => console.log(error));
     }
@@ -78,7 +82,11 @@ const CoinDetails = ({ route }) => {
 
     const chart = () => {
         return (
-            coinPrices.length > 0 && <View style={styles.chartContainer}>
+            chartLoading ? 
+            <View style={styles.spinnerContainer}>
+                <ActivityIndicator size="large" color={COLORS.white}/> 
+            </View> 
+          :  coinPrices.length > 0 && <View style={styles.chartContainer}>
             <LineChart
                 withDots={false}
                 withInnerLines={false}
@@ -103,14 +111,31 @@ const CoinDetails = ({ route }) => {
             </View>
         )
     }
-    
   return (
     <View style={styles.body}>
-      <HeaderBar title={route.params.coin.name} />
+      <HeaderBar title={
+      <>
+        <Text style={styles.text}>
+        {detailsLoading ? <></> : <Image
+        source={{uri: coinDetails?.image?.small}}
+        resizeMode='contain'
+        style={{
+            width: 25,
+            height: 25,
+            marginRight: 20
+            }}
+        /> }{route.params.coin.name}
+        </Text>
+      </>
+      } />
       {topButtons()}
       {chart()}
-      <View>
-          <Text style={styles.description}>{coinDetails?.description?.en}</Text>
+      <View style={styles.descriptionContainer}>
+        <ScrollView contentContainerStyle={{ flexGrow: 1}}>
+            <Text style={styles.description}>
+            {coinDetails?.description?.en}
+            </Text>
+        </ScrollView>
       </View>
     </View>
   )
@@ -121,8 +146,7 @@ export default CoinDetails
 const styles = StyleSheet.create({
     body: {
         flex: 1,
-        backgroundColor: COLORS.black,
-        paddingBottom: 100
+        backgroundColor: COLORS.black
       },
       buttonsContainer: {
         flexDirection: 'row',
@@ -131,14 +155,29 @@ const styles = StyleSheet.create({
         marginTop: SIZES.radius,
         marginHorizontal: SIZES.radius
       },
+      descriptionContainer: {
+        height: 800,
+        flex: 1,
+      },
       description: {
-          color: COLORS.white,
-          paddingHorizontal: SIZES.padding,
-          textAlign: 'justify'
+        height: 800,
+        color: COLORS.white,
+        paddingHorizontal: SIZES.padding,
+        textAlign: 'justify',
+        flex: 1
       },
       chartContainer: {
         color: COLORS.white,
         marginTop: SIZES.radius,
-
+        backgroundColor: 'red'
+      },
+      spinnerContainer: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: 220
+      },
+      text: {
+          color: COLORS.white
       }
 })
