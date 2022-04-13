@@ -27,7 +27,7 @@ const Home = ({ navigation, getHoldings, getCoinMarket, coins}) => {
         CommonActions.navigate({
           name: 'CryptoDetails',
           params: {
-            coin: {name: name, symbol: symbol, id: id},
+            coin: {name: name, symbol: symbol, id: id, currency: user.currency},
           },
         })
       );

@@ -14,7 +14,7 @@ const CyptoStack = createStackNavigator();
 const CryptoDetailsScreen = () => {
   return (
   <CyptoStack.Navigator>
-    <CyptoStack.Screen name="Home" component={Home} />
+    <CyptoStack.Screen name="CryptoDetailsHome" component={Home} />
     <CyptoStack.Screen name="CryptoDetails" component={CoinDetails} />
   </CyptoStack.Navigator>
   )

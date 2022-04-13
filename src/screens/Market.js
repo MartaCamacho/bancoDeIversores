@@ -146,7 +146,8 @@ const Market = () => {
                         renderItem={({item, index}) => {
                             let priceColor = item.price_change_percentage_7d_in_currency == 0 ? COLORS.lightGray3 :
                         item.price_change_percentage_7d_in_currency > 0 ? COLORS.lightGreen : COLORS.red;
-                            return (
+                            
+            return (
                                 <View style={styles.flatlistItem}>
                                     <View style={styles.flatlistCoin}>
                                         <Image

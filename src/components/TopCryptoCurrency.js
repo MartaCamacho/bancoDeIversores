@@ -6,7 +6,7 @@ import HeaderBar from './HeaderBar';
 import TextButton from './TextButton';
 import axios from 'axios';
 
-const TopCryptoCurrency = ({ coins, setSelectedCoin, userCurrency, seeCryptoDetails }) => {
+const TopCryptoCurrency = ({ coins, userCurrency, seeCryptoDetails }) => {
   const [coinList, setCoinList] = useState(coins);
   const [currencySymbol, setCurrencySymbol] = useState(userCurrency === 'eur' ? '€' : '$');
   const [currentFilter, setCurrentFilter] = useState('current_price');
