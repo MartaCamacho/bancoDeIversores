@@ -11,6 +11,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { getHoldings } from '../redux/marketActions';
 import { useFocusEffect } from '@react-navigation/native';
 import { BalanceInfo, Chart } from '../components';
+import HeaderBar from '../components/HeaderBar';
 
 import { SIZES, COLORS, FONTS, icons } from '../../constants';
 
@@ -58,11 +59,7 @@ const Portfolio = () => {
     return (
         <View style={styles.body}> 
             <View style={{ flex: 1, backgroundColor: COLORS.black}}>
-                {renderCurrentBalanceSection()}
-                <Chart 
-                      containerStyle={{marginTop: SIZES.radius}}
-                      chartPrices={selectedCoin ? selectedCoin?.sparkline_in_7d?.price : myHoldings[0]?.sparkline_in_7d?.value}
-                    />
+                <HeaderBar title="Portfolio"/>
                     <FlatList
                     data={myHoldings}
                     keyExtractor={item => item.id}

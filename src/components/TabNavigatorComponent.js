@@ -13,7 +13,10 @@ const CyptoStack = createStackNavigator();
 
 const CryptoDetailsScreen = () => {
   return (
-  <CyptoStack.Navigator>
+  <CyptoStack.Navigator
+    screenOptions={{
+      headerShown: false
+  }}>
     <CyptoStack.Screen name="CryptoDetailsHome" component={Home} />
     <CyptoStack.Screen name="CryptoDetails" component={CoinDetails} />
   </CyptoStack.Navigator>
@@ -26,6 +29,7 @@ const TabNavigatorComponent = () => {
     <Tab.Navigator
             screenOptions={{
                 headerStyle: { height: 0 },
+                headerShown: false,
                 tabBarShowLabel: false,
                 tabBarStyle: {
                     backgroundColor: COLORS.primary,
@@ -38,12 +42,13 @@ const TabNavigatorComponent = () => {
                 name="Home"
                 component={CryptoDetailsScreen}
                 options={{
+                  headerShown: false,
                   tabBarIcon: ({focused}) => {
                     return (
                       <TabIcon 
                         focused={focused}
-                        icon={icons.home}
-                        label='Home'
+                        icon={icons.market}
+                        label='Market'
                       />
                     )
                   }
@@ -59,21 +64,6 @@ const TabNavigatorComponent = () => {
                         focused={focused}
                         icon={icons.briefcase}
                         label='Portfolio'
-                      />
-                    )
-                  }
-                }}
-            />
-            <Tab.Screen
-                name="Market"
-                component={Market}
-                options={{
-                  tabBarIcon: ({focused}) => {
-                    return (
-                      <TabIcon 
-                        focused={focused}
-                        icon={icons.market}
-                        label='Market'
                       />
                     )
                   }

@@ -1,10 +1,14 @@
-import { View, Text, FlatList, TouchableOpacity, Image, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, 
+  Image, StyleSheet, ActivityIndicator, Dimensions } from 'react-native';
 import {useState, useEffect} from 'react';
 import { SIZES, COLORS, FONTS, icons } from '../../constants';
 import { LineChart } from 'react-native-chart-kit';
 import HeaderBar from './HeaderBar';
 import TextButton from './TextButton';
 import axios from 'axios';
+import {Picker} from '@react-native-picker/picker';
+
+const WIDTH = Dimensions.get('window').width;
 
 const TopCryptoCurrency = ({ coins, userCurrency, seeCryptoDetails }) => {
   const [coinList, setCoinList] = useState(coins);
@@ -57,30 +61,48 @@ const TopCryptoCurrency = ({ coins, userCurrency, seeCryptoDetails }) => {
     return ( 
     <View>
       <Text style={styles.filtersTitle}>
-        Sort by:
+        <Text style={styles.filtersTitleText}>Sort by:</Text> 
+        <View style={styles.pickerContainer}>
+          <Picker 
+          selectedFilter={currentFilter} 
+          onValueChange={(itemValue, itemIndex) => itemValue === 'id' ? [setCurrentFilter(itemValue), orderBy('id')] : setCurrentFilter(itemValue)}
+          style={styles.dropdown}
+          dropdownIconColor={COLORS.white}
+          >
+            <Picker.Item label='Price' value='current_price' />
+            <Picker.Item label='Name' value='id'/>
+            <Picker.Item label='Market cap' value='market_cap_asc' />
+            <Picker.Item label='Volume' value='total_volume' />
+          </Picker>
+        </View>
       </Text>
-      <View style={styles.buttonsContainer}>
+      
+      {/* <View style={styles.buttonsContainer}>
           <TextButton 
           label="Name"
           onPress={() => [setCurrentFilter('id'), orderBy('id')]}
           active={currentFilter === 'id'}
+          containerStyle={{marginTop: 5}}
           />
           <TextButton 
           label="Price"
           onPress={() => selectedFilter('current_price')}
           active={currentFilter === 'current_price'}
+          containerStyle={{marginTop: 5}}
           />
           <TextButton 
           label="Market cap"
           onPress={() => selectedFilter('market_cap_asc')}
           active={currentFilter === 'market_cap_asc'}
+          containerStyle={{marginTop: 5}}
           />
           <TextButton 
           label="Volume"
           onPress={() => selectedFilter('total_volume')}
           active={currentFilter === 'total_volume'}
+          containerStyle={{marginTop: 5}}
           />
-      </View>
+      </View> */}
     </View>
     )
   }
@@ -238,16 +260,41 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
+  pickerContainer: {
+    borderRadius: 10,
+    height: 30, 
+    width: WIDTH / 2, 
+    color: COLORS.white,
+    marginLeft: 30,
+    borderColor: "#666",
+
+  },
+  dropdown: {
+    backgroundColor: COLORS.gray, 
+    height: 30, 
+    width: WIDTH / 2, 
+    borderWidth: 1,
+    color: COLORS.white,
+},
   filtersTitle: {
+    flex: 1,
     color: COLORS.white,
     marginLeft: 15,
     ...FONTS.h3,
-    marginTop: 15
+    marginTop: 15,
+    marginBottom: 40,
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'center'
+  },
+  filtersTitleText: {
+    color: COLORS.white,
   },
   buttonsContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'space-between',
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
     marginTop: SIZES.radius,
     marginHorizontal: SIZES.radius
   },
