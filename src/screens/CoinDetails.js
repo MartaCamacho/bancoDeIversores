@@ -1,6 +1,8 @@
-import { StyleSheet, Text, View, ScrollView, ActivityIndicator, Image } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, 
+  ActivityIndicator, Image, Dimensions, TouchableOpacity } from 'react-native';
 import {useEffect, useState} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { setUser } from '../redux/actions';
 import { LineChart } from 'react-native-chart-kit';
 import { FontAwesome } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
@@ -10,6 +12,7 @@ import TextButton from '../components/TextButton';
 import moment from 'moment';
 
 import { SIZES, COLORS, FONTS } from '../../constants';
+const WIDTH = Dimensions.get('window').width;
 
 const CoinDetails = ({ route }) => {
     const [coinDetails, setCoinDetails] = useState([]);
@@ -17,14 +20,32 @@ const CoinDetails = ({ route }) => {
     const [timeframe, setTimeframe] = useState(86400);
     const [chartLoading, setChartLoading] = useState(true);
     const [detailsLoading, setDetailsLoading] = useState(true);
+    const [coinInPortfolio, setCoinInPortfolio] = useState(false);
     const { user } = useSelector(state => state.useReducer);
 
     const dispatch = useDispatch();
-    /* dispatch(setUser(user)); */
+
+    const modifyHoldings = () => {
+      const coinId = route.params.coin.id;
+      const userHoldings = user.holdings;
+      if(coinInPortfolio === false) {
+        console.log(false)
+        setCoinInPortfolio(true);
+        return dispatch(setUser({...user, holdings: [...userHoldings, {id: coinId}]}))
+      } else {
+        console.log(true)
+        const index = userHoldings.indexOf(coinId);
+        if (index > -1) {
+          setCoinInPortfolio(false);
+          return dispatch(setUser({...user, holdings: array.splice(index, 1)}))
+        }
+      }
+    }
 
     useEffect(() => {
         getPriceInfo();
         setDetailsLoading(true);
+        isInPortfolio();
       axios.get(`https://api.coingecko.com/api/v3/coins/${route.params.coin.id}?developer_data=false`)
       .then((response) => {
         setCoinDetails(response.data);
@@ -126,15 +147,11 @@ const CoinDetails = ({ route }) => {
     }
 
     const isInPortfolio = () => {
-      let starFilled = false;
       user.holdings.map(item => {
         if(route.params.coin.id === item.id) {
-          starFilled = true;
+          setCoinInPortfolio(true);
         }
       })
-      return starFilled ? 
-      <FontAwesome name="star" size={24} color="white" /> :
-      <AntDesign name="staro" size={24} color="white" />
     }
 
 
@@ -142,17 +159,24 @@ const CoinDetails = ({ route }) => {
     <View style={styles.body}>
       <HeaderBar title={
       <>
-        <Text style={styles.text}>
-        {detailsLoading ? <></> : <Image
-        source={{uri: coinDetails?.image?.small}}
-        resizeMode='contain'
-        style={{
-            width: 25,
-            height: 25,
-            paddingHorizontal: 20
-            }}
-        /> } {route.params.coin.name} {isInPortfolio()}
-        </Text>
+        <View style={styles.headerContainer}>
+          <View style={styles.headerTitle}>
+              {detailsLoading ? <></> : <Image
+              source={{uri: coinDetails?.image?.small}}
+              resizeMode='contain'
+              style={{
+                  width: 25,
+                  height: 25,
+                  paddingHorizontal: 20
+                  }}
+              /> }<Text style={styles.text}>{route.params.coin.name} </Text>
+          </View>
+          <TouchableOpacity style={styles.starStyles} onPress={() => modifyHoldings()}>
+              {coinInPortfolio ? 
+              <FontAwesome name="star" size={24} color="white" /> :
+              <AntDesign name="staro" size={24} color="white"/>}
+          </TouchableOpacity>
+        </View>
       </>
       } /> 
       {topButtons()}
@@ -204,7 +228,26 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         height: 220
       },
+      headerContainer: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        width: WIDTH
+      },
+      headerTitle: {
+        flexDirection: 'row',
+        alignItems: 'center',
+      },
       text: {
-          color: COLORS.white
+        color: COLORS.white,
+        ...FONTS.largeTitle
+      },
+      starStyles: {
+        width: 44, 
+        marginHorizontal: SIZES.padding, 
+        paddingVertical: SIZES.padding / 2, 
+        justifyContent: 'center', 
+        alignItems: 'center'
       }
 })
