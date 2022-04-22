@@ -1,4 +1,4 @@
-import {useCallback, useState} from 'react';
+import {useCallback} from 'react';
 import {
     View,
     Text,
@@ -9,52 +9,30 @@ import {
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { getHoldings } from '../redux/marketActions';
-import { useFocusEffect } from '@react-navigation/native';
-import { BalanceInfo, Chart } from '../components';
+import { useFocusEffect, CommonActions } from '@react-navigation/native';
 import HeaderBar from '../components/HeaderBar';
 
 import { SIZES, COLORS, FONTS, icons } from '../../constants';
 
-const Portfolio = () => {
+const Portfolio = ({navigation}) => {
     const { user } = useSelector(state => state.useReducer);
     const { myHoldings } = useSelector(state => state.marketReducer);
     const dispatch = useDispatch();
 
-    const [selectedCoin, setSelectedCoin] = useState(null);
-
     useFocusEffect(useCallback(() => {
         dispatch(getHoldings(holdings = user.holdings));
-    }, []));
+    }, [user]));
 
-    const totalWallet = myHoldings.reduce((a, b) => a + (b.total || 0), 0);
-
-    const valueChange = myHoldings.reduce((a, b) => a + (b.holding_value_change_7d || 0), 0);
-    const percChange = valueChange / (totalWallet - valueChange) * 100;
-
-    const renderCurrentBalanceSection = () => {
-        return <View style={{
-        paddingHorizontal: SIZES.padding,
-        borderBottomLeftRadius: 25,
-        borderBottomRightRadius: 25,
-        backgroundColor: COLORS.gray
-        }}>
-            <Text style={{
-                marginTop: 50,
-                color: COLORS.white,
-                ...FONTS.largeTitle
-            }}>
-            Portfolio
-            </Text>
-            <BalanceInfo title="Current Balance"
-            displayAmount={totalWallet}
-            changePct={percChange}
-            containerStyle={{
-                marginTop: SIZES.radius,
-                marginBottom: SIZES.padding
-            }}
-            />
-        </View>
-    }
+    const seeCryptoDetails = (name, symbol, id) => {
+        navigation.dispatch(
+          CommonActions.navigate({
+            name: 'CryptoDetails',
+            params: {
+              coin: {name: name, symbol: symbol, id: id, currency: user.currency},
+            },
+          })
+        );
+      };
 
     return (
         <View style={styles.body}> 
@@ -86,13 +64,6 @@ const Portfolio = () => {
                                     }}>
                                 Price
                                 </Text>
-                                <Text style={{
-                                    flex: 1, 
-                                    color: COLORS.lightGray3,
-                                    textAlign: 'right' 
-                                    }}>
-                                Holdings
-                                </Text>
                             </View>
                           </View>
                       }
@@ -103,7 +74,7 @@ const Portfolio = () => {
 
                         return <TouchableOpacity
                         style={{flexDirection: 'row', height: 55}}
-                        onPress={() => setSelectedCoin(item)}>
+                        onPress={() => seeCryptoDetails(item.name, item.symbol, item.id)}>
                         <View style={{
                             flex: 1,
                             flexDirection: 'row',
@@ -130,7 +101,7 @@ const Portfolio = () => {
                                     ...FONTS.h4,
                                     lineHeight: 15
                                 }}>
-                                ${item.current_price.toLocaleString()}
+                                {user.currency.toUpperCase()} {item.current_price.toLocaleString()}
                                 </Text>
                                 <View
                                 style={{
@@ -160,27 +131,6 @@ const Portfolio = () => {
                                 </Text>
                                 </View>
                             </View>
-                            <View style={{ flex: 1, justifyContent: 'center' }}>
-                                <Text
-                                style={{
-                                    textAlign: 'right',
-                                    color: COLORS.white,
-                                    ...FONTS.h4,
-                                    lineHeight: 15
-                                }}>
-                                    $ {item.total.toLocaleString()}
-                                </Text>
-                                <Text
-                                 style={{
-                                    textAlign: 'right',
-                                    color: COLORS.lightGray3,
-                                    ...FONTS.body5,
-                                    lineHeight: 15
-                                }}>
-                                    {item.qty} {item.symbol.toUpperCase()}
-                                </Text>
-                            </View>
-
                         </View>
 
                         </TouchableOpacity>

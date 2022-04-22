@@ -20,25 +20,27 @@ const CoinDetails = ({ route }) => {
     const [timeframe, setTimeframe] = useState(86400);
     const [chartLoading, setChartLoading] = useState(true);
     const [detailsLoading, setDetailsLoading] = useState(true);
-    const [coinInPortfolio, setCoinInPortfolio] = useState(false);
+    const [coinInPortfolio, setCoinInPortfolio] = useState(null);
     const { user } = useSelector(state => state.useReducer);
 
     const dispatch = useDispatch();
 
-    const modifyHoldings = () => {
+    const modifyHoldings = (bool) => {
       const coinId = route.params.coin.id;
-      const userHoldings = user.holdings;
-      if(coinInPortfolio === false) {
-        console.log(false)
+      const userHoldings = [...user.holdings];
+      if(bool === true) {
         setCoinInPortfolio(true);
-        return dispatch(setUser({...user, holdings: [...userHoldings, {id: coinId}]}))
+        return dispatch(setUser({...user, holdings: [...userHoldings, {id: coinId}]}));
       } else {
-        console.log(true)
-        const index = userHoldings.indexOf(coinId);
-        if (index > -1) {
-          setCoinInPortfolio(false);
-          return dispatch(setUser({...user, holdings: array.splice(index, 1)}))
-        }
+        let holdingIndex;
+        userHoldings.map((holding, index) => {
+          if(holding.id.toLowerCase() === coinId.toLowerCase()) {
+            holdingIndex = index;
+          }
+        });
+        userHoldings.splice(holdingIndex, 1);
+        setCoinInPortfolio(false);
+        return dispatch(setUser({...user, holdings: userHoldings}));
       }
     }
 
@@ -49,7 +51,7 @@ const CoinDetails = ({ route }) => {
       axios.get(`https://api.coingecko.com/api/v3/coins/${route.params.coin.id}?developer_data=false`)
       .then((response) => {
         setCoinDetails(response.data);
-        setDetailsLoading(false)
+        setDetailsLoading(false);
       })
       .catch((error) => console.log(error));
 
@@ -154,6 +156,24 @@ const CoinDetails = ({ route }) => {
       })
     }
 
+    const priceChangePercentPeriod = () => {
+      if(timeframe === 3600) {
+        return coinDetails?.market_data?.price_change_percentage_1h_in_currency[user.currency]
+      }
+      if(timeframe === 86400) {
+        return coinDetails?.market_data?.price_change_percentage_24h_in_currency[user.currency]
+      }
+      if(timeframe === 604800) {
+        return coinDetails?.market_data?.price_change_percentage_7d_in_currency[user.currency]
+      }
+      if(timeframe === 2629743) {
+        return coinDetails?.market_data?.price_change_percentage_30d_in_currency[user.currency]
+      }
+      if(timeframe === 31556926) {
+        return coinDetails?.market_data?.price_change_percentage_1y_in_currency[user.currency]
+      }
+      
+    }
 
   return (
     <View style={styles.body}>
@@ -171,10 +191,10 @@ const CoinDetails = ({ route }) => {
                   }}
               /> }<Text style={styles.text}>{route.params.coin.name} </Text>
           </View>
-          <TouchableOpacity style={styles.starStyles} onPress={() => modifyHoldings()}>
+          <TouchableOpacity style={styles.starStyles}>
               {coinInPortfolio ? 
-              <FontAwesome name="star" size={24} color="white" /> :
-              <AntDesign name="staro" size={24} color="white"/>}
+              <FontAwesome onPress={() => modifyHoldings(false)} name="star" size={24} color="white"/> :
+              <AntDesign onPress={() => modifyHoldings(true)} name="staro" size={24} color="white"/>}
           </TouchableOpacity>
         </View>
       </>
@@ -183,6 +203,10 @@ const CoinDetails = ({ route }) => {
       {chart()}
       <View style={styles.descriptionContainer}>
         <ScrollView contentContainerStyle={{ flexGrow: 1}}>
+            <Text style={styles.details}>Market Cap Rank: {coinDetails.market_cap_rank}</Text>
+            <Text style={styles.details}>Market Cap: {coinDetails?.market_data?.market_cap[user.currency]} {user.currency.toUpperCase()}</Text>
+            <Text style={styles.details}>Current Price: {coinDetails?.market_data?.current_price[user.currency]} {user.currency.toUpperCase()}</Text>
+            <Text style={styles.details}>Price Change Percent: {priceChangePercentPeriod()} %</Text>
             <Text style={styles.description}>
             {coinDetails?.description?.en}
             </Text>
@@ -242,6 +266,11 @@ const styles = StyleSheet.create({
       text: {
         color: COLORS.white,
         ...FONTS.largeTitle
+      },
+      details: {
+        color: COLORS.white,
+        paddingHorizontal: SIZES.padding,
+        paddingVertical: SIZES.padding / 2
       },
       starStyles: {
         width: 44, 

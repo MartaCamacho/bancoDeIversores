@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, StatusBar, TouchableOpacity, ScrollView, Image, Switch } from 'react-native';
+import { StyleSheet, Text, View, StatusBar, TouchableOpacity, ScrollView, Image } from 'react-native';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setLogged, setUser } from '../redux/actions';
@@ -9,7 +9,6 @@ import { SIZES, COLORS, FONTS, icons } from '../../constants';
 const Settings = ({navigation}) => {
   const dispatch = useDispatch();
   const { logged, user } = useSelector(state => state.useReducer);
-  const [switchItem, setSwitchItem] = useState(false);
 
   const logOut = () => {
     dispatch(setLogged(false));
@@ -27,97 +26,51 @@ const Settings = ({navigation}) => {
     )
   }
 
-  const Setting = ({ title, value, type, onPress}) => {
-    return type === 'button' ? 
-    <TouchableOpacity style={styles.settingIntemContainer} onPress={onPress}>
-      <Text style={styles.settingItemLeftText}>{title}</Text>
-      <View style={styles.settingItemRightText}>
-        <Text style={styles.settingItemRightGray}>
-          {value}
-        </Text>
-        <Image
-        source={icons.rightArrow}
-        style={styles.settingItemRightArrow} />
-      </View>
-    </TouchableOpacity> 
-    : 
-    <View style={styles.switch}>
-      <Text style={styles.settingItemLeftText}>{title}</Text>
-      <Switch
-        value={value}
-        onValueChange={(value) => onPress(value)}
-      />
-    </View>
+  const Setting = ({ title, value, onPress, arrow}) => {
+    return <TouchableOpacity style={styles.settingIntemContainer} onPress={onPress}>
+              <Text style={styles.settingItemLeftText}>{title}</Text>
+              <View style={styles.settingItemRightText}>
+                <Text style={styles.settingItemRightGray}>
+                  {value}
+                </Text>
+                {arrow && <Image
+                source={icons.rightArrow}
+                style={styles.settingItemRightArrow} />}
+              </View>
+            </TouchableOpacity> 
   }
 
   return (
     <View style={styles.body}>
-      {/* <Text style={styles.title}>
-        Settings
-      </Text>
-      <Text 
-      style={styles.item}
-      onPress={() => logOut()}
-      >
-        Log out
-      </Text> */}
-
+      <HeaderBar title="Settings" />
       <View style={styles.profileContainer}>
-        <HeaderBar title="Settings" />
         <ScrollView>
-          <View style={styles.emailContainer}>
-            <View style={{ flex: 1 }}>
-              <Text style={styles.email}>
-                {user.email}
-              </Text>
-            </View>
-          </View>
-          <SectionTitle title="APP" />
-          <Setting 
-            title="Launch Screen"
-            value="Home"
-            type="button"
-            onPress={() => console.log('pressed')}
-          />
-          <Setting 
-            title="Appearance"
-            value="Dark"
-            type="button"
-            onPress={() => console.log('pressed')}
-          />
-
           <SectionTitle title="ACCOUNT" />
           <Setting 
-            title="Payment Currency"
-            value="USD"
-            type="button"
+            title="Currency"
+            value={user.currency.toUpperCase()}
+            arrow={true}
             onPress={() => console.log('pressed')}
           />
           <Setting 
-            title="Language"
-            value="English"
-            type="button"
+            title="Email"
+            value={user.email}
+            arrow={true}
             onPress={() => console.log('pressed')}
           />
 
           <SectionTitle title="SECURITY" />
           <Setting 
-            title="dummy text"
-            value={switchItem}
-            type="switch"
-            onPress={(value) => setSwitchItem(value)}
-          />
-          <Setting 
-            title="Password Settings"
+            title="Password"
             value=""
-            type="button"
+            arrow={true}
             onPress={() => console.log('pressed')}
           />
           <Setting 
-            title="Change Password"
+            title="Log out"
             value=""
-            type="button"
-            onPress={() => console.log('pressed')}
+            arrow={false}
+            onPress={() => logOut()}
           />
         </ScrollView>
       </View>
@@ -136,10 +89,6 @@ const styles = StyleSheet.create({
     profileContainer: {
       paddingHorizontal: SIZES.padding,
       backgroundColor: COLORS.black
-    },
-    emailContainer: {
-      flexDirection: 'row',
-      marginTop: SIZES.radius
     },
     email: {
       color: COLORS.white,
@@ -173,10 +122,5 @@ const styles = StyleSheet.create({
       height: 15,
       width: 15,
       tintColor: COLORS.white
-    },
-    switch: {
-      flexDirection: 'row',
-      height: 50,
-      alignItems: 'center'
     }
 })

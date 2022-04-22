@@ -7,20 +7,16 @@ const initialState = {
         email: 'm@c.com',
         currency: 'eur',
         holdings: [{
-            id: "bitcoin",
-            qty: 888
+            id: "bitcoin"
         },
         {
-            id: "ethereum",
-            qty: 188
+            id: "ethereum"
         },
         {
-            id: "dogecoin",
-            qty: 88888
+            id: "dogecoin"
         },
         {
-            id: "litecoin",
-            qty: 66
+            id: "litecoin"
         }]
     }
 };
