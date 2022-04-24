@@ -1,10 +1,9 @@
 import { View, Text, FlatList, TouchableOpacity, 
   Image, StyleSheet, ActivityIndicator, Dimensions } from 'react-native';
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useRef} from 'react';
 import { SIZES, COLORS, FONTS, icons } from '../../constants';
 import { LineChart } from 'react-native-chart-kit';
 import HeaderBar from './HeaderBar';
-import TextButton from './TextButton';
 import axios from 'axios';
 import {Picker} from '@react-native-picker/picker';
 
@@ -16,10 +15,11 @@ const TopCryptoCurrency = ({ coins, userCurrency, seeCryptoDetails }) => {
   const [currentFilter, setCurrentFilter] = useState('current_price');
   const [loading, setLoading] = useState(true);
   const [isSorted, setIsSorted] = useState(false);
+  const pickerRef = useRef(null);
 
   useEffect(() => {
     orderList();
-  }, [])
+  }, []);
   
   const orderBy = (item) => {
     setIsSorted(!isSorted);
@@ -50,21 +50,16 @@ const TopCryptoCurrency = ({ coins, userCurrency, seeCryptoDetails }) => {
         console.error(error, 'Axios GET request failed');
         setLoading(false);
       });
-  }
-
-  const selectedFilter = (filter) => {
-    orderList( null, filter, null );
-    return setCurrentFilter(filter);
   };
 
   const renderFilterButtons = () => {
     return ( 
-    <View>
-      <Text style={styles.filtersTitle}>
-        <Text style={styles.filtersTitleText}>Sort by:</Text> 
+      <View style={styles.filtersTitle}>
+        <Text style={styles.filtersTitleText}>Sort by:</Text>
         <View style={styles.pickerContainer}>
           <Picker 
-          selectedFilter={currentFilter} 
+          selectedValue={currentFilter} 
+          ref={pickerRef}
           onValueChange={(itemValue, itemIndex) => itemValue === 'id' ? [setCurrentFilter(itemValue), orderBy('id')] : setCurrentFilter(itemValue)}
           style={styles.dropdown}
           dropdownIconColor={COLORS.white}
@@ -75,35 +70,7 @@ const TopCryptoCurrency = ({ coins, userCurrency, seeCryptoDetails }) => {
             <Picker.Item label='Volume' value='total_volume' />
           </Picker>
         </View>
-      </Text>
-      
-      {/* <View style={styles.buttonsContainer}>
-          <TextButton 
-          label="Name"
-          onPress={() => [setCurrentFilter('id'), orderBy('id')]}
-          active={currentFilter === 'id'}
-          containerStyle={{marginTop: 5}}
-          />
-          <TextButton 
-          label="Price"
-          onPress={() => selectedFilter('current_price')}
-          active={currentFilter === 'current_price'}
-          containerStyle={{marginTop: 5}}
-          />
-          <TextButton 
-          label="Market cap"
-          onPress={() => selectedFilter('market_cap_asc')}
-          active={currentFilter === 'market_cap_asc'}
-          containerStyle={{marginTop: 5}}
-          />
-          <TextButton 
-          label="Volume"
-          onPress={() => selectedFilter('total_volume')}
-          active={currentFilter === 'total_volume'}
-          containerStyle={{marginTop: 5}}
-          />
-      </View> */}
-    </View>
+      </View>
     )
   }
 
@@ -262,33 +229,26 @@ const styles = StyleSheet.create({
   },
   pickerContainer: {
     borderRadius: 10,
-    height: 30, 
     width: WIDTH / 2, 
     color: COLORS.white,
-    marginLeft: 30,
     borderColor: "#666",
-
   },
   dropdown: {
     backgroundColor: COLORS.gray, 
-    height: 30, 
     width: WIDTH / 2, 
     borderWidth: 1,
     color: COLORS.white,
 },
   filtersTitle: {
-    flex: 1,
     color: COLORS.white,
-    marginLeft: 15,
     ...FONTS.h3,
-    marginTop: 15,
-    marginBottom: 40,
-    alignItems: 'center',
+    marginVertical: 15,
     flexDirection: 'row',
-    justifyContent: 'center'
+    alignItems: 'center'
   },
   filtersTitleText: {
     color: COLORS.white,
+    marginHorizontal: 15,
   },
   buttonsContainer: {
     flexDirection: 'row',

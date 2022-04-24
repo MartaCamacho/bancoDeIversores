@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, StatusBar, TouchableOpacity, ScrollView, Image } from 'react-native';
+import { StyleSheet, Text, View, StatusBar, TouchableOpacity, ScrollView, Image, Modal, TextInput } from 'react-native';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setLogged, setUser } from '../redux/actions';
@@ -12,8 +12,7 @@ const Settings = ({navigation}) => {
 
   const logOut = () => {
     dispatch(setLogged(false));
-    dispatch(setUser(''));
-    navigation.navigate('Login');
+    dispatch(setUser(undefined));
   };
 
   const SectionTitle = ({ title }) => {
@@ -47,14 +46,20 @@ const Settings = ({navigation}) => {
         <ScrollView>
           <SectionTitle title="ACCOUNT" />
           <Setting 
-            title="Currency"
-            value={user.currency.toUpperCase()}
+            title="Name"
+            value={user.userName}
             arrow={true}
             onPress={() => console.log('pressed')}
           />
           <Setting 
             title="Email"
             value={user.email}
+            arrow={true}
+            onPress={() => console.log('pressed')}
+          />
+          <Setting 
+            title="Currency"
+            value={user.currency.toUpperCase()}
             arrow={true}
             onPress={() => console.log('pressed')}
           />
@@ -73,6 +78,11 @@ const Settings = ({navigation}) => {
             onPress={() => logOut()}
           />
         </ScrollView>
+        {/* <Modal
+        
+        >
+
+        </Modal> */}
       </View>
       
     </View>

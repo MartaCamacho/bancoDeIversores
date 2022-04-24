@@ -5,7 +5,7 @@ import {
     TouchableOpacity,
     FlatList,
     Image,
-    StyleSheet
+    StyleSheet,
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { getHoldings } from '../redux/marketActions';

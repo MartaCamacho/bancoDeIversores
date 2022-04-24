@@ -1,24 +1,17 @@
 import { StyleSheet, Text, View, Image, TextInput, Alert } from 'react-native';
 import { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { setLogged, setUser } from '../redux/actions';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ButtonComponent from '../components/ButtonComponent';
 
 const Login = ({ navigation }) => {
-  const { logged } = useSelector(state => state.useReducer);
   const [ email, setEmail ] = useState('');
   const [ password, setPassword ] = useState('');
   const [ emailError, setEmailError ] = useState('');
   const [ passwordError, setPasswordError ] = useState('');
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    if(logged) {
-      navigation.navigate('Home');
-    }
-  }, []);
   
   const handleLogin = async () => {
     emailErrorValidation();
@@ -27,16 +20,22 @@ const Login = ({ navigation }) => {
     if(!emailError, !passwordError) {
       try {
         const userData = () => AsyncStorage.getItem('userData').then((result) => {
-          const user = JSON.parse(result);
-          if(user && user.email === email && user.password === password) {
-            dispatch(setLogged(true));
-            dispatch(setUser(user));
-            navigation.navigate('Home'); 
-          } else {
-            Alert.alert('', 'User not found');
+          const users = JSON.parse(result);
+          let userFound = false;
+          users.map(user => {
+            if(user.email === email && user.password === password) {
+              dispatch(setLogged(true));
+              dispatch(setUser(user));
+              userFound = true;
+              navigation.navigate('Home'); 
+            }
+          });
+
+          if(!userFound) {
+            Alert.alert('', 'Incorrect user or password');
           }
         })
-        .catch((err) => console.warn(err));
+        .catch((err) => console.log(err));
         userData();
       } catch (error) {
         console.log(error);
@@ -62,7 +61,7 @@ const Login = ({ navigation }) => {
   const errorMessage = (field) => <Text style={styles.errorMessage}>{field}</Text>;
 
   return (
-    <KeyboardAwareScrollView style={{backgroundColor: '#000000', flex: 1,}}>
+    <KeyboardAwareScrollView contentContainerStyle={{backgroundColor: '#000000', flex: 1}}>
       <View style={styles.body}>
         <Image
         style={styles.logo}

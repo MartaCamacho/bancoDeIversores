@@ -1,22 +1,25 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from "@react-navigation/stack";
+import { useSelector } from 'react-redux';
+import { COLORS, icons } from "../../constants";
+import { TabIcon } from '../components';
+import Signup from "../screens/Signup";
+import Login from "../screens/Login";
 import Home from '../screens/Home';
 import Portfolio from '../screens/Portfolio';
-import Market from '../screens/Market';
 import Settings from '../screens/Settings';
-import { TabIcon } from '../components';
-import { COLORS, icons } from "../../constants";
 import CoinDetails from '../screens/CoinDetails';
 
 const Tab = createBottomTabNavigator();
 const CyptoStack = createStackNavigator();
+const AuthStack = createStackNavigator();
 
 const CryptoDetailsScreen = () => {
   return (
   <CyptoStack.Navigator
     screenOptions={{
       headerShown: false
-  }}>
+    }}>
     <CyptoStack.Screen name="CryptoDetailsHome" component={Home} />
     <CyptoStack.Screen name="CryptoDetails" component={CoinDetails} />
   </CyptoStack.Navigator>
@@ -24,8 +27,10 @@ const CryptoDetailsScreen = () => {
 }
 
 const TabNavigatorComponent = () => {
+  const { logged } = useSelector(state => state.useReducer);
   
   return (
+    logged ? 
     <Tab.Navigator
             screenOptions={{
                 headerStyle: { height: 0 },
@@ -84,8 +89,21 @@ const TabNavigatorComponent = () => {
                   }
                 }}
             />
-            
         </Tab.Navigator>
+        :
+         <AuthStack.Navigator
+            screenOptions={{
+            headerStyle: { height: 0 }
+        }}>
+            <AuthStack.Screen 
+            name="Login"
+            component={Login}
+              />
+            <AuthStack.Screen 
+            name="Signup"
+            component={Signup}
+              />
+        </AuthStack.Navigator> 
   )
 }
 

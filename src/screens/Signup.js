@@ -1,6 +1,6 @@
-import { StyleSheet, Text, View, Image, TextInput } from 'react-native';
+import { StyleSheet, Text, View, Image, TextInput, Dimensions, Alert } from 'react-native';
 import { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { setLogged, setUser } from '../redux/actions';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -16,29 +16,43 @@ const Signup = ({ navigation }) => {
   const [ passwordError, setPasswordError ] = useState('');
   const [ repeatPasswordError, setRepeatPasswordError ] = useState('');
 
-  const { logged } = useSelector(state => state.useReducer);
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    if(logged) {
-      navigation.navigate('Home');
-    }
-  }, []);
-  
 
   const handleSubmit = async () => {
     userNameErrorValidation();
     emailErrorValidation();
     passwordErrorValidation();
     repeatPassErrorValidation();
-
-    if(!userNameError, !emailError, !passwordError, !repeatPasswordError) {
+    if(!userNameError, !emailError, !passwordError, !repeatPasswordError, 
+      email !== '', userName !== '', password !== '', repeatPassword !== '') {
       try {
-        const userData = { email, password, userName };
-        await AsyncStorage.setItem('userData', JSON.stringify(userData));
-        dispatch(setLogged(true));
-        dispatch(setUser(userData));
-        navigation.navigate('Home');
+        AsyncStorage.getItem('userData').then((result) => {
+          const user = JSON.parse(result);
+          const userData = { email, password, userName, currency: 'eur', holdings: [] };
+
+          const setUserFunction = (item) => {
+            AsyncStorage.setItem('userData', item);
+            dispatch(setLogged(true));
+            dispatch(setUser(userData));
+            navigation.navigate('Home');
+          };
+
+          if(user !== null) {
+            let userAlreadyRegistered = false;
+              user.map(userItem => {
+              if(userItem.email === email) {
+                userAlreadyRegistered = true;
+                return Alert.alert('', 'This email is already registered');
+              }
+            });
+            if(!userAlreadyRegistered) {
+              return setUserFunction(JSON.stringify([...user, userData]));
+            }
+          } else {
+            return setUserFunction(JSON.stringify([userData]));
+          }
+        })
+        .catch((err) => console.log(err));
       } catch (error) {
         console.log(error);
       }
@@ -72,9 +86,11 @@ const Signup = ({ navigation }) => {
 
   const errorMessage = (field) => <Text style={styles.errorMessage}>{field}</Text>;
 
+  const windowHeight = Dimensions.get('window').height;
+
   return (
-    <KeyboardAwareScrollView style={{backgroundColor: '#141414', flex: 1,}}>
-      <View style={styles.body}>
+    <KeyboardAwareScrollView>
+      <View style={[styles.body, {minHeight: windowHeight}]}>
         <Image
         style={styles.logo}
         source={require('../../assets/logo.png')}
