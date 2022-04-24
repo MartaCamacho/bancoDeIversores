@@ -41,66 +41,45 @@ const Portfolio = ({navigation}) => {
                     <FlatList
                     data={myHoldings}
                     keyExtractor={item => item.id}
-                      contentContainerStyle={{
-                        marginTop: SIZES.padding,
-                        paddingHorizontal: SIZES.padding
-                      }}
-                      ListHeaderComponent={
-                          <View>
-                            <Text style={{...FONTS.h2, color: COLORS.white}}>
-                            Your Assets
+                    contentContainerStyle={styles.listContainer}
+                    ListHeaderComponent={
+                        <View>
+                          <Text style={styles.header}>
+                          Your Assets
+                          </Text>
+                          {user.holdings.length > 0 ? <View style={{flexDirection: 'row', marginTop: SIZES.radius}}>
+                              <Text style={styles.tableHeaderItem}>
+                              Asset
+                              </Text>
+                              <Text style={[styles.tableHeaderItem, { textAlign: 'right' }]}>
+                              Price
+                              </Text>
+                          </View> : <View>
+                            <Text style={styles.noHoldingsMessage}>
+                            You have no holdings yet, check out the <Text style={styles.noHoldingsLink} onPress={() => navigation.navigate('Home')}>Top Crypto</Text> and save your favourites to see them here
                             </Text>
-                            <View style={{flexDirection: 'row', marginTop: SIZES.radius}}>
-                                <Text style={{
-                                    flex: 1, 
-                                    color: COLORS.lightGray3
-                                    }}>
-                                Asset
-                                </Text>
-                                <Text style={{
-                                    flex: 1, 
-                                    color: COLORS.lightGray3,
-                                    textAlign: 'right' 
-                                    }}>
-                                Price
-                                </Text>
-                            </View>
-                          </View>
-                      }
+                          </View>}
+                        </View>
+                    }
                     renderItem={({item}) => {
 
                         let priceColor = item.price_change_percentage_7d_in_currency == 0 ? COLORS.lightGray3 :
                         item.price_change_percentage_7d_in_currency > 0 ? COLORS.lightGreen : COLORS.red;
-
+console.log(item)
                         return <TouchableOpacity
-                        style={{flexDirection: 'row', height: 55}}
+                        style={styles.tableContentItem}
                         onPress={() => seeCryptoDetails(item.name, item.symbol, item.id)}>
-                        <View style={{
-                            flex: 1,
-                            flexDirection: 'row',
-                            alignItems: 'center'
-                            }}>
+                        <View style={styles.tableContentItemAlignment}>
                             <Image 
                                 source={{ uri: item.image}}
                                 style={{width: 20, height: 20}}
                             />
-                            <Text
-                            style={{ 
-                                marginLeft: SIZES.radius,
-                                color: COLORS.white,
-                                ...FONTS.h4
-                            }}
-                            >
+                            <Text style={styles.coinName}>
                             {item.name}
                             </Text>
                             <View style={{ flex: 1, justifyContent: 'center'}}>
                                 <Text
-                                style={{
-                                    textAlign: 'right',
-                                    color: COLORS.white,
-                                    ...FONTS.h4,
-                                    lineHeight: 15
-                                }}>
+                                style={styles.currency}>
                                 {user.currency.toUpperCase()} {item.current_price.toLocaleString()}
                                 </Text>
                                 <View
@@ -149,4 +128,44 @@ const Portfolio = ({navigation}) => {
       flex: 1,
       backgroundColor: COLORS.black,
     },
+    header: {
+      ...FONTS.h2, 
+      color: COLORS.white
+    },
+    noHoldingsMessage: {
+      color: COLORS.white,
+      ...FONTS.h3,
+      marginTop: 20
+    },
+    noHoldingsLink: {
+      color: 'blue'
+    },
+    listContainer: {
+      marginTop: SIZES.padding,
+      paddingHorizontal: SIZES.padding
+    },
+    tableHeaderItem: {
+      flex: 1, 
+      color: COLORS.lightGray3
+    },
+    tableContentItem: {
+      flexDirection: 'row', 
+      height: 55
+    },
+    tableContentItemAlignment: {
+      flex: 1,
+      flexDirection: 'row',
+      alignItems: 'center'
+    },
+    coinName: {
+      marginLeft: SIZES.radius,
+      color: COLORS.white,
+      ...FONTS.h4
+    },
+    currency: {
+      textAlign: 'right',
+      color: COLORS.white,
+      ...FONTS.h4,
+      lineHeight: 15
+    }
   })

@@ -6,10 +6,10 @@ import { setUser } from '../redux/actions';
 import { LineChart } from 'react-native-chart-kit';
 import { FontAwesome } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import HeaderBar from '../components/HeaderBar';
 import TextButton from '../components/TextButton';
-import moment from 'moment';
 
 import { SIZES, COLORS, FONTS } from '../../constants';
 const WIDTH = Dimensions.get('window').width;

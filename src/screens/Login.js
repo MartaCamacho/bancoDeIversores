@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, Image, TextInput, Alert } from 'react-native';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { setLogged, setUser } from '../redux/actions';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
