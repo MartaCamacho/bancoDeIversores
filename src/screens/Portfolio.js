@@ -38,7 +38,7 @@ const Portfolio = ({navigation}) => {
         <View style={styles.body}> 
             <View style={{ flex: 1, backgroundColor: COLORS.black}}>
                 <HeaderBar title="Portfolio"/>
-                    <FlatList
+                {user.holdings.length > 0 ? <FlatList
                     data={myHoldings}
                     keyExtractor={item => item.id}
                     contentContainerStyle={styles.listContainer}
@@ -47,25 +47,18 @@ const Portfolio = ({navigation}) => {
                           <Text style={styles.header}>
                           Your Assets
                           </Text>
-                          {user.holdings.length > 0 ? <View style={{flexDirection: 'row', marginTop: SIZES.radius}}>
-                              <Text style={styles.tableHeaderItem}>
+                          <Text style={styles.tableHeaderItem}>
                               Asset
                               </Text>
                               <Text style={[styles.tableHeaderItem, { textAlign: 'right' }]}>
                               Price
                               </Text>
-                          </View> : <View>
-                            <Text style={styles.noHoldingsMessage}>
-                            You have no holdings yet, check out the <Text style={styles.noHoldingsLink} onPress={() => navigation.navigate('Home')}>Top Crypto</Text> and save your favourites to see them here
-                            </Text>
-                          </View>}
-                        </View>
+                          </View>
                     }
                     renderItem={({item}) => {
 
                         let priceColor = item.price_change_percentage_7d_in_currency == 0 ? COLORS.lightGray3 :
                         item.price_change_percentage_7d_in_currency > 0 ? COLORS.lightGreen : COLORS.red;
-console.log(item)
                         return <TouchableOpacity
                         style={styles.tableContentItem}
                         onPress={() => seeCryptoDetails(item.name, item.symbol, item.id)}>
@@ -114,12 +107,15 @@ console.log(item)
 
                         </TouchableOpacity>
                     }}
-                    />
+                    /> : <View>
+                      <Text style={styles.noHoldingsMessage}>
+                      You have no holdings yet, check out the <Text style={styles.noHoldingsLink} onPress={() => navigation.navigate('Home')}>Top Crypto</Text> and save your favourites to see them here
+                      </Text>
+                    </View>}
             </View>
         </View>
     )
 }
-  
   
   export default Portfolio
 
@@ -135,7 +131,8 @@ console.log(item)
     noHoldingsMessage: {
       color: COLORS.white,
       ...FONTS.h3,
-      marginTop: 20
+      marginTop: 20,
+      paddingHorizontal: SIZES.padding / 2
     },
     noHoldingsLink: {
       color: 'blue'

@@ -25,6 +25,7 @@ const Settings = ({navigation}) => {
   const [ errorPassword, setErrorPassword ] = useState('');
   const [ errorRepeatPassword, setErrorRepeatPassword ] = useState('');
 
+
   const logOut = () => {
     dispatch(setLogged(false));
     dispatch(setUser(undefined));
@@ -39,13 +40,13 @@ const Settings = ({navigation}) => {
       </View>
     )
   }
-  /* console.log(user) */
 
   const handleSave = async () => {
     if(newUserName !== user.userName) {
       userNameErrorValidation();
     } else if(newPassword !== user.password) {
       passwordErrorValidation();
+      repeatPassErrorValidation();
     } else if(newEmail !== user.email) {
       emailErrorValidation();
     }

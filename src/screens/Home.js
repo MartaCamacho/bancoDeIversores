@@ -1,5 +1,5 @@
 import { StyleSheet, View, Text } from 'react-native';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { useSelector, connect } from 'react-redux';
 import { getCoinMarket } from '../redux/marketActions';
 import { useFocusEffect } from '@react-navigation/native';
@@ -10,6 +10,7 @@ import TopCryptoCurrency from '../components/TopCryptoCurrency';
 
 const Home = ({ navigation, getCoinMarket, coins}) => {
     const { user } = useSelector(state => state.useReducer);
+    const [search, setSearch] = useState("");
 
     useFocusEffect(useCallback(() => {
         getCoinMarket();

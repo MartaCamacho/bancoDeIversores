@@ -1,6 +1,7 @@
-import { View, Text, FlatList, TouchableOpacity, 
+import { View, Text, FlatList, TouchableOpacity, TextInput,
   Image, StyleSheet, ActivityIndicator, Dimensions } from 'react-native';
 import {useState, useEffect, useRef} from 'react';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { SIZES, COLORS, FONTS, icons } from '../../constants';
 import { LineChart } from 'react-native-chart-kit';
 import HeaderBar from './HeaderBar';
@@ -11,10 +12,11 @@ const WIDTH = Dimensions.get('window').width;
 
 const TopCryptoCurrency = ({ coins, userCurrency, seeCryptoDetails }) => {
   const [coinList, setCoinList] = useState(coins);
-  const [currencySymbol, setCurrencySymbol] = useState(userCurrency === 'eur' ? '€' : '$');
+  const [currencySymbol, setCurrencySymbol] = useState(userCurrency.toUpperCase());
   const [currentFilter, setCurrentFilter] = useState('current_price');
   const [loading, setLoading] = useState(true);
   const [isSorted, setIsSorted] = useState(false);
+  const [search, setSearch] = useState("");
   const pickerRef = useRef(null);
 
   useEffect(() => {
@@ -33,7 +35,7 @@ const TopCryptoCurrency = ({ coins, userCurrency, seeCryptoDetails }) => {
   };
   
   const orderList = (currency, order, page) => {
-    const perPage = 25;
+    const perPage = 50;
     let currencyUrl
     if(currencySymbol === '€' && !currency) {
       currencyUrl = 'eur';
@@ -60,15 +62,25 @@ const TopCryptoCurrency = ({ coins, userCurrency, seeCryptoDetails }) => {
           <Picker 
           selectedValue={currentFilter} 
           ref={pickerRef}
-          onValueChange={(itemValue, itemIndex) => itemValue === 'id' ? [setCurrentFilter(itemValue), orderBy('id')] : setCurrentFilter(itemValue)}
+          onValueChange={(itemValue, itemIndex) => itemValue === 'id' || itemValue === 'idReverse' ? [setCurrentFilter(itemValue), orderBy('id')] : setCurrentFilter(itemValue)}
           style={styles.dropdown}
           dropdownIconColor={COLORS.white}
           >
             <Picker.Item label='Price' value='current_price' />
-            <Picker.Item label='Name' value='id'/>
+            <Picker.Item label='Name Z-A' value='id'/>
+            <Picker.Item label='Name A-Z' value='idReverse'/>
             <Picker.Item label='Market cap' value='market_cap_asc' />
             <Picker.Item label='Volume' value='total_volume' />
           </Picker>
+        </View>
+        <View style={styles.searchContainer}>
+          <TextInput
+          style={styles.searchInput}
+          placeholder="Search..."
+          placeholderTextColor="#858585"
+          onChangeText={(text) => text && setSearch(text)}
+          />
+          <MaterialCommunityIcons name="magnify" size={20} color="#858585" style={styles.magnifyingGlass}/>
         </View>
       </View>
     )
@@ -95,7 +107,10 @@ const TopCryptoCurrency = ({ coins, userCurrency, seeCryptoDetails }) => {
               color: COLORS.lightGray3,
               textAlign: 'right' 
               }}>
-          Filter
+              {currentFilter === 'current_price' ? 'Price' : 
+              currentFilter === 'total_volume' ? 'Volume' :
+              currentFilter === 'market_cap_asc' ? 'Market Cap' 
+              : 'Filter'}
           </Text>
       </View>
     )
@@ -112,7 +127,11 @@ const TopCryptoCurrency = ({ coins, userCurrency, seeCryptoDetails }) => {
                 <>
                 {tableHeader()}
                 <FlatList
-                      data={coinList}
+                      data={coinList.filter(
+                        (coin) =>
+                          coin.name.toLowerCase().includes(search.toLocaleLowerCase()) ||
+                          coin.symbol.toLocaleLowerCase().includes(search.toLocaleLowerCase())
+                      )}
                       keyExtractor={item => item.id}
                       contentContainerStyle={{
                         marginTop: 5,
@@ -235,7 +254,7 @@ const styles = StyleSheet.create({
   },
   dropdown: {
     backgroundColor: COLORS.gray, 
-    width: WIDTH / 2, 
+    width: WIDTH / 2.5, 
     borderWidth: 1,
     color: COLORS.white,
 },
@@ -244,7 +263,7 @@ const styles = StyleSheet.create({
     ...FONTS.h3,
     marginVertical: 15,
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   filtersTitleText: {
     color: COLORS.white,
@@ -272,5 +291,20 @@ const styles = StyleSheet.create({
     flexDirection: 'row', 
     marginTop: 30,
     paddingHorizontal: SIZES.padding
+  },
+  searchInput: {
+    color: "#fff",
+    borderBottomColor: "#4657CE",
+    borderBottomWidth: 1,
+    textAlign: "center",
+  },
+  searchContainer: {
+    position: 'relative',
+    width: "25%",
+  },
+  magnifyingGlass: {
+    position: 'absolute',
+    right: 2,
+    bottom: 5,
   }
 })
