@@ -4,9 +4,10 @@ import {useState, useEffect, useRef} from 'react';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { SIZES, COLORS, FONTS, icons } from '../../constants';
 import { LineChart } from 'react-native-chart-kit';
-import HeaderBar from './HeaderBar';
-import axios from 'axios';
 import {Picker} from '@react-native-picker/picker';
+import axios from 'axios';
+import HeaderBar from './HeaderBar';
+const numbro = require("numbro");
 
 const WIDTH = Dimensions.get('window').width;
 
@@ -34,14 +35,10 @@ const TopCryptoCurrency = ({ coins, userCurrency, seeCryptoDetails }) => {
     });
   };
   
-  const orderList = (currency, order, page) => {
+  const orderList = (order, page) => {
     const perPage = 50;
-    let currencyUrl
-    if(currencySymbol === '€' && !currency) {
-      currencyUrl = 'eur';
-    }
     setLoading(true);
-    const baseUrl = `https://api.coingecko.com/api/v3/coins/markets?vs_currency=${currency || currencyUrl || 'usd'}&order=${order || 'market_cap_desc'}&per_page=${perPage}&page=${page || 1}&sparkline=true`;
+    const baseUrl = `https://api.coingecko.com/api/v3/coins/markets?vs_currency=${currencySymbol}&order=${order || 'market_cap_desc'}&per_page=${perPage}&page=${page || 1}&sparkline=true`;
     axios
       .get(baseUrl)
       .then((res) => {
@@ -66,10 +63,10 @@ const TopCryptoCurrency = ({ coins, userCurrency, seeCryptoDetails }) => {
           style={styles.dropdown}
           dropdownIconColor={COLORS.white}
           >
+            <Picker.Item label='Market cap' value='market_cap_desc' />
             <Picker.Item label='Price' value='current_price' />
             <Picker.Item label='Name Z-A' value='id'/>
             <Picker.Item label='Name A-Z' value='idReverse'/>
-            <Picker.Item label='Market cap' value='market_cap_asc' />
             <Picker.Item label='Volume' value='total_volume' />
           </Picker>
         </View>
@@ -109,7 +106,7 @@ const TopCryptoCurrency = ({ coins, userCurrency, seeCryptoDetails }) => {
               }}>
               {currentFilter === 'current_price' ? 'Price' : 
               currentFilter === 'total_volume' ? 'Volume' :
-              currentFilter === 'market_cap_asc' ? 'Market Cap' 
+              currentFilter === 'market_cap_desc' ? 'Market Cap' 
               : 'Filter'}
           </Text>
       </View>
@@ -192,10 +189,10 @@ const TopCryptoCurrency = ({ coins, userCurrency, seeCryptoDetails }) => {
                               color: COLORS.white,
                               ...FONTS.h4 }}>
                               {currencySymbol} {currentFilter === 'current_price' ? 
-                              item.current_price : currentFilter === 'market_cap_desc' 
+                              numbro(item.current_price).format({thousandSeparated: true}) : currentFilter === 'market_cap_desc' 
                               || currentFilter === 'market_cap_desc' ? 
-                              item.market_cap : currentFilter === 'total_volume' ? 
-                              item.total_volume : item.current_price }
+                              numbro(item.market_cap).format({thousandSeparated: true}) : currentFilter === 'total_volume' ? 
+                              numbro(item.total_volume).format({thousandSeparated: true}) : numbro(item.current_price).format({thousandSeparated: true}) }
                             </Text>
                             <View style={{
                               flexDirection: 'row',
@@ -221,7 +218,7 @@ const TopCryptoCurrency = ({ coins, userCurrency, seeCryptoDetails }) => {
                                 ...FONTS.body5,
                                 lineHeight: 15
                               }}>
-                                {item?.price_change_percentage_24h?.toFixed(2)}%
+                                {numbro(item?.price_change_percentage_24h?.toFixed(2)).format({thousandSeparated: true})}%
                               </Text>}
                             </View>
                           </View>

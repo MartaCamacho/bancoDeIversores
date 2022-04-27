@@ -11,6 +11,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { getHoldings } from '../redux/marketActions';
 import { useFocusEffect, CommonActions } from '@react-navigation/native';
 import HeaderBar from '../components/HeaderBar';
+const numbro = require("numbro");
 
 import { SIZES, COLORS, FONTS, icons } from '../../constants';
 
@@ -73,7 +74,7 @@ const Portfolio = ({navigation}) => {
                             <View style={{ flex: 1, justifyContent: 'center'}}>
                                 <Text
                                 style={styles.currency}>
-                                {user.currency.toUpperCase()} {item.current_price.toLocaleString()}
+                                {user.currency.toUpperCase()} {numbro(item.current_price.toLocaleString()).format({thousandSeparated: true})}
                                 </Text>
                                 <View
                                 style={{

@@ -1,20 +1,34 @@
 import { StyleSheet, View, Text } from 'react-native';
-import { useCallback, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector, connect } from 'react-redux';
 import { getCoinMarket } from '../redux/marketActions';
-import { useFocusEffect } from '@react-navigation/native';
 import { CommonActions } from '@react-navigation/native';
 
 import { COLORS } from '../../constants';
 import TopCryptoCurrency from '../components/TopCryptoCurrency';
 
-const Home = ({ navigation, getCoinMarket, coins}) => {
+const Home = ({ navigation}) => {
     const { user } = useSelector(state => state.useReducer);
-    const [search, setSearch] = useState("");
+    const [ coins, setCoins ] = useState([]);
 
-    useFocusEffect(useCallback(() => {
-        getCoinMarket();
-    }, []));
+    useEffect(() => {
+      getCoinMarket();
+    }, []);
+  
+    const getCoinMarket = () => {
+      const apiUrl = `https://api.coingecko.com/api/v3/coins/markets?vs_currency=${user.currency}&order=market_cap_desc&per_page=50&page=1&sparkline=true&price_change_percentage=7d`;
+      return axios({
+          url: apiUrl,
+          method: 'GET',
+          header: {
+              Accept: 'application/json'
+          }
+      }).then((res) => {
+          if(res.status == 200) {
+            setCoins(res.data);
+          } 
+      }).catch((err) => console.log(err));
+  };
 
     const seeCryptoDetails = (name, symbol, id) => {
       navigation.dispatch(

@@ -1,18 +1,24 @@
-import { StyleSheet, Text, View, StatusBar, TouchableOpacity, ScrollView, Image } from 'react-native';
-import { useState } from 'react';
+import { StyleSheet, Text, View, Pressable, TouchableOpacity, 
+  ScrollView, Image, Dimensions } from 'react-native';
+import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setLogged, setUser } from '../redux/actions';
+import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { SIZES, COLORS, FONTS, icons } from '../../constants';
+const WIDTH = Dimensions.get('window').width;
+import { Feather } from '@expo/vector-icons';
 import HeaderBar from '../components/HeaderBar';
 import ModalSettings from '../components/ModalSettings';
 
 const Settings = ({navigation}) => {
   const dispatch = useDispatch();
   const { user } = useSelector(state => state.useReducer);
+  const [ currencyItems, setCurrencyItems ]= useState([]);
   const [ newUserName, setNewUserName ] = useState(user.userName);
-  const [ newPassword, setNewPassword ] = useState(user.password);
+  const [ newPassword, setNewPassword ] = useState('');
+  const [ passwordChanged, setPasswordChanged ] = useState(false);
   const [ repeatNewPassword, setRepeatNewPassword ] = useState('');
   const [ newEmail, setNewEmail ] = useState(user.email);
   const [ newCurrency, setNewCurrency ] = useState(user.currency);
@@ -25,6 +31,13 @@ const Settings = ({navigation}) => {
   const [ errorPassword, setErrorPassword ] = useState('');
   const [ errorRepeatPassword, setErrorRepeatPassword ] = useState('');
 
+  useEffect(() => {
+    axios.get('https://api.coingecko.com/api/v3/coins/bitcoin').then((res) => {
+      const data = res.data.market_data.price_change_24h_in_currency;
+      setCurrencyItems(Object.keys(data));
+    }).catch((error) => console.log(error));
+  }, []);
+  
 
   const logOut = () => {
     dispatch(setLogged(false));
@@ -42,17 +55,27 @@ const Settings = ({navigation}) => {
   }
 
   const handleSave = async () => {
+    const resetValues = () => {
+      setNewUserName(user.userName);
+      setNewEmail(user.email);
+      setNewPassword('');
+      setRepeatNewPassword('');
+      setPasswordChanged(false)
+    }
     if(newUserName !== user.userName) {
       userNameErrorValidation();
-    } else if(newPassword !== user.password) {
+    } else if(newPassword !== user.password && passwordChanged === true) {
       passwordErrorValidation();
       repeatPassErrorValidation();
     } else if(newEmail !== user.email) {
       emailErrorValidation();
     }
+    console.log(user, errorUsername, errorPassword, errorRepeatPassword, errorEmail)
+
+    const newPass = newPassword !== '' && newPassword !== user.password ? newPassword : user.password;
 
     if(!errorUsername && !errorPassword && !errorRepeatPassword && !errorEmail) {
-      const newUser = {...user, userName: newUserName, password: newPassword, email: newEmail, currency: newCurrency}
+      const newUser = {...user, userName: newUserName, password: newPass, email: newEmail, currency: newCurrency}
       
       let existingUsers = await AsyncStorage.getItem('userData');
       existingUsers = JSON.parse(existingUsers);
@@ -66,11 +89,10 @@ const Settings = ({navigation}) => {
       if(existingUsers && newUser) {
         await AsyncStorage.setItem('userData', JSON.stringify([...existingUsers, newUser]))
         dispatch(setUser(newUser));
+        resetValues();
       }
     } else {
-      setNewUserName(user.userName);
-      setNewPassword(user.password);
-      setNewEmail(user.email);
+      resetValues();
     }
   }
 
@@ -113,6 +135,24 @@ const Settings = ({navigation}) => {
   };
 
   /* / input validations */
+
+  const currencyModal = () => {
+    return(
+      <ScrollView style={styles.currencyContainer}>
+      {currencyItems.map((item, i) => {
+        return <Pressable 
+        style={styles.currencyItem}
+        key={`currencyItem${i}`}
+        onPress={() => setNewCurrency(item)}
+        android_ripple={{ color: '#00000050' }}
+        >
+          <Text style={styles.currencyText}>{item}</Text>
+          {newCurrency.toLowerCase() === item.toLowerCase() && <Feather name="check" size={24} color="green" style={styles.checkIcon} />}
+        </Pressable>
+      })}
+      </ScrollView>
+    )
+  } 
   
 
   return (
@@ -167,8 +207,10 @@ const Settings = ({navigation}) => {
             closeModal={setModalCurrencyOpen}
             currentValue={newCurrency}
             newInputValue={setNewCurrency}
+            errorMessage={''}
             title="Currency"
             handleSave={handleSave}
+            customContent={currencyModal}
           />
 
           <SectionTitle title="SECURITY" />
@@ -176,7 +218,7 @@ const Settings = ({navigation}) => {
             title="Password"
             value=""
             arrow={true}
-            onPress={() => setModalPasswordOpen(true)}
+            onPress={() => [setModalPasswordOpen(true), setPasswordChanged(true)]}
           />
           <ModalSettings 
             modalOpen={modalPasswordOpen}
@@ -275,5 +317,28 @@ const styles = StyleSheet.create({
     },
     saveButton: {
       borderRadius: 5,
+    },
+    currencyContainer: {
+      flexWrap: 'wrap'
+    },
+    currencyText: {
+      color: COLORS.white,
+      fontSize: 16,
+    },
+    currencyItem: {
+      borderColor: COLORS.white,
+      borderBottomWidth: 1,
+      width: WIDTH,
+      padding: 20,
+      textAlign: 'center',
+      justifyContent: 'center',
+      borderRadius: SIZES.radius / 2,
+      flexDirection: 'row',
+      position: 'relative'
+    },
+    checkIcon: {
+      position: 'absolute',
+      right: 20,
+      top: 20
     }
 })

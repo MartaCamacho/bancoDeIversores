@@ -2,7 +2,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from "@react-navigation/stack";
 import { useSelector } from 'react-redux';
 import { COLORS, icons } from "../../constants";
-import { TabIcon } from '../components';
+import TabIcon from '../components/TabIcon';
 import Signup from "../screens/Signup";
 import Login from "../screens/Login";
 import Home from '../screens/Home';

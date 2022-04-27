@@ -6,10 +6,10 @@ import { setUser } from '../redux/actions';
 import { LineChart } from 'react-native-chart-kit';
 import { FontAwesome } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import HeaderBar from '../components/HeaderBar';
 import TextButton from '../components/TextButton';
+const numbro = require("numbro");
 
 import { SIZES, COLORS, FONTS } from '../../constants';
 const WIDTH = Dimensions.get('window').width;
@@ -22,6 +22,7 @@ const CoinDetails = ({ route }) => {
     const [detailsLoading, setDetailsLoading] = useState(true);
     const [coinInPortfolio, setCoinInPortfolio] = useState(null);
     const { user } = useSelector(state => state.useReducer);
+    
 
     const dispatch = useDispatch();
 
@@ -204,8 +205,8 @@ const CoinDetails = ({ route }) => {
       <View style={styles.descriptionContainer}>
         <ScrollView contentContainerStyle={{ flexGrow: 1}}>
             <Text style={styles.details}>Market Cap Rank: {coinDetails.market_cap_rank}</Text>
-            <Text style={styles.details}>Market Cap: {coinDetails?.market_data?.market_cap[user.currency]} {user.currency.toUpperCase()}</Text>
-            <Text style={styles.details}>Current Price: {coinDetails?.market_data?.current_price[user.currency]} {user.currency.toUpperCase()}</Text>
+            <Text style={styles.details}>Market Cap: {numbro(coinDetails?.market_data?.market_cap[user.currency]).format({thousandSeparated: true})} {user.currency.toUpperCase()}</Text>
+            <Text style={styles.details}>Current Price: {numbro(coinDetails?.market_data?.current_price[user.currency]).format({thousandSeparated: true})} {user.currency.toUpperCase()}</Text>
             <Text style={styles.details}>Price Change Percent: {priceChangePercentPeriod()} %</Text>
             <Text style={styles.description}>
             {coinDetails?.description?.en}

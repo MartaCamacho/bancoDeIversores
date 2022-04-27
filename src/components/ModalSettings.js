@@ -5,9 +5,16 @@ import { SIZES, COLORS } from '../../constants';
 
 const ModalSettings = ({ modalOpen, closeModal, currentValue, newInputValue, title, 
     keyboardInputType, isPassword, handleSave, newInputValue2, currentValue2, errorMessage,
-    errorMessage2, onFocus, onFocus2, onBlur, onBlur2 }) => {
+    errorMessage2, onFocus, onFocus2, onBlur, onBlur2, customContent }) => {
 
   const errorMessageText = (field) => <Text style={styles.errorMessage}>{field}</Text>;
+
+  const handleSubmit = () => {
+    if(errorMessage === '' && newInputValue !== '') {
+      handleSave()
+      closeModal(false)
+    }
+  }
 
   return (
     <Modal
@@ -16,6 +23,7 @@ const ModalSettings = ({ modalOpen, closeModal, currentValue, newInputValue, tit
           onRequestClose={() => closeModal(false)}
           >
             <View style={styles.modal}>
+                {customContent ? customContent() : 
                 <View style={styles.modalContent}>
                     <Text style={styles.modalText}>Change {title}:</Text>
                     <TextInput
@@ -33,7 +41,7 @@ const ModalSettings = ({ modalOpen, closeModal, currentValue, newInputValue, tit
                     {errorMessage ? errorMessageText(errorMessage) : <></>}
                     {isPassword && 
                     <>
-                        <Text style={styles.modalText}>Repeat {title}:</Text>
+                        <Text style={[styles.modalText, {marginTop: 20}]}>Repeat {title}:</Text>
                         <TextInput
                         style={styles.textInput}
                         onChangeText={(text) => newInputValue2(text)}
@@ -50,6 +58,7 @@ const ModalSettings = ({ modalOpen, closeModal, currentValue, newInputValue, tit
                     }
                     {errorMessage2 ? errorMessageText(errorMessage2) : <></>}
                 </View>
+                    }
                 
                 <TouchableOpacity
                 style={styles.saveButton}
@@ -58,7 +67,7 @@ const ModalSettings = ({ modalOpen, closeModal, currentValue, newInputValue, tit
                         <ButtonComponent
                         title="Save"
                         color='#B0191E'
-                        onPressFunction={() => [handleSave(), closeModal(false)]}
+                        onPressFunction={() => handleSubmit()}
                         />
                         <ButtonComponent
                         title="Close"
@@ -88,6 +97,9 @@ const styles = StyleSheet.create({
     },
     modalText: {
       color: COLORS.white,
+      width: 300,
+      maxWidth: '95%',
+      paddingHorizontal: SIZES.padding / 2,
     },
     textInput: {
       backgroundColor: COLORS.white,
@@ -107,6 +119,7 @@ const styles = StyleSheet.create({
     errorMessage: {
         color: '#B0191E',
         width: 300,
+        marginHorizontal: 10,
         maxWidth: '95%',
     },
     closeButtonContent: {
