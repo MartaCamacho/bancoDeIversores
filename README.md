@@ -1,13 +1,13 @@
-Banco de Inversores Cryptocurrency App
+#Banco de Inversores Cryptocurrency App
 
 This project is a cryptocurrency app where you can create your user, check crypto prices and save them on your portfolio. The app was created aiming to be the first prototype of the final app to be presented to the Bank as a starting point.
 
-What you will need to install this project on yout computer:
+##What you will need to install this project on yout computer:
 
     Node
     Android Studio and Android SDK
 
-Base dependencies
+##Base dependencies
 
     axios for networking.
     expo for accessing the expo app and emulators
@@ -25,11 +25,11 @@ Base dependencies
     redux-thunk to dispatch asynchronous actions.
     jest and react-native-testing-library for testing.
 
-Usage
+##Usage
 
 Run npm install once you have forked/cloned the repo
 
-Folder structure
+##Folder structure
 
 This template follows a very simple project structure:
 
@@ -42,11 +42,11 @@ This template follows a very simple project structure:
             Screen: Each screen has the logic and styles in a single file.
         App.js: Main component that starts the whole app.
 
-Splash screen customization
+##Splash screen customization
 
 To customize the splash screen (logo and background color) use the CLI provided in the official docs.
 
-Generate production version
+##Generate production version
 
 These are the steps to generate .apk, .aab and .ipa files
 Android
