@@ -1,4 +1,4 @@
-import {useCallback} from 'react';
+import { useState, useEffect } from 'react';
 import {
     View,
     Text,
@@ -7,9 +7,9 @@ import {
     Image,
     StyleSheet,
 } from 'react-native';
-import { useSelector, useDispatch } from 'react-redux';
-import { getHoldings } from '../redux/marketActions';
-import { useFocusEffect, CommonActions } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
+import { CommonActions } from '@react-navigation/native';
+import axios from 'axios';
 import HeaderBar from '../components/HeaderBar';
 const numbro = require("numbro");
 
@@ -17,12 +17,45 @@ import { SIZES, COLORS, FONTS, icons } from '../../constants';
 
 const Portfolio = ({navigation}) => {
     const { user } = useSelector(state => state.useReducer);
-    const { myHoldings } = useSelector(state => state.marketReducer);
-    const dispatch = useDispatch();
+    const [myHoldings, setMyHoldings] = useState([]);
 
-    useFocusEffect(useCallback(() => {
-        dispatch(getHoldings(holdings = user.holdings));
-    }, [user]));
+    useEffect(() => {
+      const ids = user.holdings.map((item) => { return item.id }).join(',');
+        const apiUrl = `https://api.coingecko.com/api/v3/coins/markets?vs_currency=${user.currency}&order=market_cap_desc&per_page=100&page=1&sparkline=true&price_change_percentage=7d&ids=${ids}`;
+        return axios({
+            url: apiUrl,
+            method: 'GET',
+            header: {
+                Accept: 'application/json'
+            }
+        }).then((res) => {
+            if(res.status == 200) {
+                const myHoldings = res.data.map((item) => {
+                    const coin = user.holdings.find(a => a.id == item.id);
+                    const price7d = item.current_price / (1 + item.price_change_percentage_7d_in_currency * 0.01);
+                    
+                    return {
+                        id: item.id,
+                        symbol: item.symbol,
+                        name: item.name,
+                        image: item.image,
+                        current_price: item.current_price,
+                        qty: coin.qty,
+                        total: coin.qty * item.current_price,
+                        price_change_percentage_7d_in_currency: item.price_change_percentage_7d_in_currency,
+                        holding_value_change_7d: (item.current_price / price7d) * coin.qty,
+                        sparkline_in_7d: {
+                            value: item.sparkline_in_7d.price.map((price) => {
+                                return price * coin.qty;
+                            })
+                        }
+                    };
+                });
+
+                setMyHoldings(myHoldings);
+            }
+        }).catch((err) => console.log(err));
+    }, [user]);
 
     const seeCryptoDetails = (name, symbol, id) => {
         navigation.dispatch(
@@ -57,7 +90,6 @@ const Portfolio = ({navigation}) => {
                           </View>
                     }
                     renderItem={({item}) => {
-
                         let priceColor = item.price_change_percentage_7d_in_currency == 0 ? COLORS.lightGray3 :
                         item.price_change_percentage_7d_in_currency > 0 ? COLORS.lightGreen : COLORS.red;
                         return <TouchableOpacity
@@ -74,7 +106,7 @@ const Portfolio = ({navigation}) => {
                             <View style={{ flex: 1, justifyContent: 'center'}}>
                                 <Text
                                 style={styles.currency}>
-                                {user.currency.toUpperCase()} {numbro(item.current_price.toLocaleString()).format({thousandSeparated: true})}
+                                {user.currency.toUpperCase()} {numbro(item?.current_price.toLocaleString()).format({thousandSeparated: true})}
                                 </Text>
                                 <View
                                 style={{

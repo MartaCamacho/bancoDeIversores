@@ -36,7 +36,6 @@ const Signup = ({ navigation }) => {
             dispatch(setUser(userData));
             navigation.navigate('Home');
           };
-
           if(user !== null) {
             let userAlreadyRegistered = false;
               user.map(userItem => {

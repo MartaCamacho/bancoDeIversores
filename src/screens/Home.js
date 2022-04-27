@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useSelector, connect } from 'react-redux';
 import { getCoinMarket } from '../redux/marketActions';
 import { CommonActions } from '@react-navigation/native';
+import axios from 'axios';
 
 import { COLORS } from '../../constants';
 import TopCryptoCurrency from '../components/TopCryptoCurrency';
@@ -12,7 +13,9 @@ const Home = ({ navigation}) => {
     const [ coins, setCoins ] = useState([]);
 
     useEffect(() => {
-      getCoinMarket();
+      if(user) {
+        getCoinMarket();
+      }
     }, []);
   
     const getCoinMarket = () => {

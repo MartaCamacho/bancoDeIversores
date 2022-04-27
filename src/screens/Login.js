@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, TextInput, Alert } from 'react-native';
+import { StyleSheet, Text, View, Image, TextInput, Alert, Dimensions } from 'react-native';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { setLogged, setUser } from '../redux/actions';
@@ -22,14 +22,16 @@ const Login = ({ navigation }) => {
         const userData = () => AsyncStorage.getItem('userData').then((result) => {
           const users = JSON.parse(result);
           let userFound = false;
-          users.map(user => {
-            if(user.email === email && user.password === password) {
-              dispatch(setLogged(true));
-              dispatch(setUser(user));
-              userFound = true;
-              navigation.navigate('Home'); 
-            }
-          });
+          if(users) {
+            users.map(user => {
+              if(user.email === email && user.password === password) {
+                dispatch(setLogged(true));
+                dispatch(setUser(user));
+                userFound = true;
+                navigation.navigate('Home'); 
+              }
+            });
+          }
 
           if(!userFound) {
             Alert.alert('', 'Incorrect user or password');
@@ -60,9 +62,11 @@ const Login = ({ navigation }) => {
 
   const errorMessage = (field) => <Text style={styles.errorMessage}>{field}</Text>;
 
+  const windowHeight = Dimensions.get('window').height;
+
   return (
-    <KeyboardAwareScrollView contentContainerStyle={{backgroundColor: '#000000', flex: 1}}>
-      <View style={styles.body}>
+    <KeyboardAwareScrollView>
+      <View style={[styles.body, {minHeight: windowHeight}]}>
         <Image
         style={styles.logo}
         source={require('../../assets/logo.png')}

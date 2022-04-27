@@ -61,7 +61,7 @@ const CoinDetails = ({ route }) => {
     const getPriceInfo = () => {
         setChartLoading(true)
         const now = Math.round((new Date()).getTime() / 1000);
-        axios.get(`https://api.coingecko.com/api/v3/coins/${route.params.coin.id}/market_chart/range?vs_currency=${route.params.coin.currency}&from=${now - timeframe}&to=${now}`)
+       axios.get(`https://api.coingecko.com/api/v3/coins/${route.params.coin.id}/market_chart/range?vs_currency=${route.params.coin.currency}&from=${now - timeframe}&to=${now}`)
         .then((response) => {
             const transformPrices = () => {
               const data = response.data ? response.data.prices.map((item) => {

@@ -12,7 +12,7 @@ import { Feather } from '@expo/vector-icons';
 import HeaderBar from '../components/HeaderBar';
 import ModalSettings from '../components/ModalSettings';
 
-const Settings = ({navigation}) => {
+const Settings = () => {
   const dispatch = useDispatch();
   const { user } = useSelector(state => state.useReducer);
   const [ currencyItems, setCurrencyItems ]= useState([]);
@@ -55,9 +55,9 @@ const Settings = ({navigation}) => {
   }
 
   const handleSave = async () => {
-    const resetValues = () => {
-      setNewUserName(user.userName);
-      setNewEmail(user.email);
+    const resetValues = (value) => {
+      setNewUserName(value.userName);
+      setNewEmail(value.email);
       setNewPassword('');
       setRepeatNewPassword('');
       setPasswordChanged(false)
@@ -70,7 +70,6 @@ const Settings = ({navigation}) => {
     } else if(newEmail !== user.email) {
       emailErrorValidation();
     }
-    console.log(user, errorUsername, errorPassword, errorRepeatPassword, errorEmail)
 
     const newPass = newPassword !== '' && newPassword !== user.password ? newPassword : user.password;
 
@@ -89,7 +88,7 @@ const Settings = ({navigation}) => {
       if(existingUsers && newUser) {
         await AsyncStorage.setItem('userData', JSON.stringify([...existingUsers, newUser]))
         dispatch(setUser(newUser));
-        resetValues();
+        resetValues(newUser);
       }
     } else {
       resetValues();
