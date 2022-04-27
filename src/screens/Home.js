@@ -1,12 +1,11 @@
 import { StyleSheet, View, Text } from 'react-native';
 import { useEffect, useState } from 'react';
-import { useSelector, connect } from 'react-redux';
-import { getCoinMarket } from '../redux/marketActions';
+import { useSelector } from 'react-redux';
 import { CommonActions } from '@react-navigation/native';
 import axios from 'axios';
+import TopCryptoCurrency from '../components/TopCryptoCurrency';
 
 import { COLORS } from '../../constants';
-import TopCryptoCurrency from '../components/TopCryptoCurrency';
 
 const Home = ({ navigation}) => {
     const { user } = useSelector(state => state.useReducer);
@@ -52,21 +51,8 @@ const Home = ({ navigation}) => {
   )
 }
 
-function mapStateToProps(state) {
-  return {
-    coins: state.marketReducer.coins
-  }
-}
 
-function mapDispatchToProps(dispatch) {
-  return {
-    getCoinMarket: (currency, coinList, orderBy, sparkLine, priceChangePerc, perPage, page) => {
-      return dispatch(getCoinMarket( currency, coinList, orderBy, sparkLine, priceChangePerc, perPage, page))
-    }
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Home)
+export default Home;
 
 const styles = StyleSheet.create({
   body: {

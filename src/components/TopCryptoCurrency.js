@@ -2,14 +2,15 @@ import { View, Text, FlatList, TouchableOpacity, TextInput,
   Image, StyleSheet, ActivityIndicator, Dimensions } from 'react-native';
 import {useState, useEffect, useRef} from 'react';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { SIZES, COLORS, FONTS, icons } from '../../constants';
 import { LineChart } from 'react-native-chart-kit';
 import {Picker} from '@react-native-picker/picker';
 import axios from 'axios';
 import HeaderBar from './HeaderBar';
-const numbro = require("numbro");
 
+import { SIZES, COLORS, FONTS, icons } from '../../constants';
+const numbro = require("numbro");
 const WIDTH = Dimensions.get('window').width;
+
 
 const TopCryptoCurrency = ({ coins, userCurrency, seeCryptoDetails }) => {
   const [coinList, setCoinList] = useState(coins);

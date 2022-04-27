@@ -106,7 +106,6 @@ const Settings = () => {
                 source={icons.rightArrow}
                 style={styles.settingItemRightArrow} />}
               </View>
-              
             </TouchableOpacity> 
   }
 

@@ -1,8 +1,8 @@
-import { StyleSheet, Text, View, Image } from 'react-native';
+import { Text, View, Image } from 'react-native';
 import React from 'react';
-import { FONTS, COLORS } from '../../constants';
+import { COLORS } from '../../constants';
 
-const TabIcon = ({ focused, icon, iconStyle, label, isTrade }) => {
+const TabIcon = ({ focused, icon, iconStyle, isTrade }) => {
     if(isTrade) {
         return <View style={{ alignItems: 'center', 
             justifyContent: 'center',

@@ -22,7 +22,6 @@ const CoinDetails = ({ route }) => {
     const [detailsLoading, setDetailsLoading] = useState(true);
     const [coinInPortfolio, setCoinInPortfolio] = useState(null);
     const { user } = useSelector(state => state.useReducer);
-    
 
     const dispatch = useDispatch();
 
@@ -43,7 +42,7 @@ const CoinDetails = ({ route }) => {
         setCoinInPortfolio(false);
         return dispatch(setUser({...user, holdings: userHoldings}));
       }
-    }
+    };
 
     useEffect(() => {
         getPriceInfo();
@@ -55,11 +54,10 @@ const CoinDetails = ({ route }) => {
         setDetailsLoading(false);
       })
       .catch((error) => console.log(error));
-
     }, []);
 
     const getPriceInfo = () => {
-        setChartLoading(true)
+        setChartLoading(true);
         const now = Math.round((new Date()).getTime() / 1000);
        axios.get(`https://api.coingecko.com/api/v3/coins/${route.params.coin.id}/market_chart/range?vs_currency=${route.params.coin.currency}&from=${now - timeframe}&to=${now}`)
         .then((response) => {
@@ -70,7 +68,7 @@ const CoinDetails = ({ route }) => {
               return data;
             };
           setCoinPrices(transformPrices());
-          setChartLoading(false)
+          setChartLoading(false);
         })
         .catch((error) => console.log(error));
     };
@@ -202,17 +200,20 @@ const CoinDetails = ({ route }) => {
       } /> 
       {topButtons()}
       {chart()}
-      <View style={styles.descriptionContainer}>
-        <ScrollView contentContainerStyle={{ flexGrow: 1}}>
-            <Text style={styles.details}>Market Cap Rank: {coinDetails.market_cap_rank}</Text>
-            <Text style={styles.details}>Market Cap: {numbro(coinDetails?.market_data?.market_cap[user.currency]).format({thousandSeparated: true})} {user.currency.toUpperCase()}</Text>
-            <Text style={styles.details}>Current Price: {numbro(coinDetails?.market_data?.current_price[user.currency]).format({thousandSeparated: true})} {user.currency.toUpperCase()}</Text>
-            <Text style={styles.details}>Price Change Percent: {priceChangePercentPeriod()} %</Text>
-            <Text style={styles.description}>
-            {coinDetails?.description?.en}
-            </Text>
-        </ScrollView>
-      </View>
+      {
+        detailsLoading ? <></> : 
+        <View style={styles.descriptionContainer}>
+          <ScrollView contentContainerStyle={{ flexGrow: 1}}>
+              <Text style={styles.details}>Market Cap Rank: {coinDetails.market_cap_rank}</Text>
+              <Text style={styles.details}>Market Cap: {numbro(coinDetails?.market_data?.market_cap[user.currency]).format({thousandSeparated: true})} {user.currency.toUpperCase()}</Text>
+              <Text style={styles.details}>Current Price: {numbro(coinDetails?.market_data?.current_price[user.currency]).format({thousandSeparated: true})} {user.currency.toUpperCase()}</Text>
+              <Text style={styles.details}>Price Change Percent: {priceChangePercentPeriod()} %</Text>
+              <Text style={styles.description}>
+              {coinDetails?.description?.en}
+              </Text>
+          </ScrollView>
+        </View>
+      }
     </View>
   )
 }

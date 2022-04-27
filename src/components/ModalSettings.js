@@ -11,8 +11,8 @@ const ModalSettings = ({ modalOpen, closeModal, currentValue, newInputValue, tit
 
   const handleSubmit = () => {
     if(errorMessage === '' && newInputValue !== '') {
-      handleSave()
-      closeModal(false)
+      handleSave();
+      closeModal(false);
     }
   }
 

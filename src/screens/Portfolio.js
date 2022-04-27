@@ -17,7 +17,7 @@ import { SIZES, COLORS, FONTS, icons } from '../../constants';
 
 const Portfolio = ({navigation}) => {
     const { user } = useSelector(state => state.useReducer);
-    const [myHoldings, setMyHoldings] = useState([]);
+    const [ myHoldings, setMyHoldings ] = useState([]);
 
     useEffect(() => {
       const ids = user.holdings.map((item) => { return item.id }).join(',');
@@ -31,24 +31,13 @@ const Portfolio = ({navigation}) => {
         }).then((res) => {
             if(res.status == 200) {
                 const myHoldings = res.data.map((item) => {
-                    const coin = user.holdings.find(a => a.id == item.id);
-                    const price7d = item.current_price / (1 + item.price_change_percentage_7d_in_currency * 0.01);
-                    
                     return {
                         id: item.id,
                         symbol: item.symbol,
                         name: item.name,
                         image: item.image,
                         current_price: item.current_price,
-                        qty: coin.qty,
-                        total: coin.qty * item.current_price,
-                        price_change_percentage_7d_in_currency: item.price_change_percentage_7d_in_currency,
-                        holding_value_change_7d: (item.current_price / price7d) * coin.qty,
-                        sparkline_in_7d: {
-                            value: item.sparkline_in_7d.price.map((price) => {
-                                return price * coin.qty;
-                            })
-                        }
+                        price_change_percentage_7d_in_currency: item.price_change_percentage_7d_in_currency
                     };
                 });
 
@@ -109,29 +98,18 @@ const Portfolio = ({navigation}) => {
                                 {user.currency.toUpperCase()} {numbro(item?.current_price.toLocaleString()).format({thousandSeparated: true})}
                                 </Text>
                                 <View
-                                style={{
-                                    flexDirection: 'row',
-                                    alignItems: 'center',
-                                    justifyContent: 'flex-end'
-                                }}>
+                                style={styles.changeContainer}>
                                 {
                                   item.price_change_percentage_7d_in_currency != 0 && <Image 
                                   source={icons.upArrow}
-                                  style={{
-                                    height: 10,
-                                    width: 10,
+                                  style={[styles.changePercentIcon, {
                                     tintColor: priceColor,
                                     transform: item.price_change_percentage_7d_in_currency > 0 ? 
                                     [{rotate: '45deg'}] : [{rotate: '125deg'}]
-                                  }}
+                                  }]}
                                 />
                                 }
-                                <Text style={{
-                                  marginLeft: 5,
-                                  color: priceColor,
-                                  ...FONTS.body5,
-                                  lineHeight: 15
-                                }}>
+                                <Text style={styles.changePercent}>
                                   {item.price_change_percentage_7d_in_currency.toFixed(2)}%
                                 </Text>
                                 </View>
@@ -196,6 +174,21 @@ const Portfolio = ({navigation}) => {
       textAlign: 'right',
       color: COLORS.white,
       ...FONTS.h4,
+      lineHeight: 15
+    },
+    changeContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'flex-end'
+    },
+    changePercentIcon: {
+      height: 10,
+      width: 10,
+    },
+    changePercent: {
+      marginLeft: 5,
+      color: priceColor,
+      ...FONTS.body5,
       lineHeight: 15
     }
   })
