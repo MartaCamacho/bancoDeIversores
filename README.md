@@ -2,6 +2,8 @@
 
 This project is a cryptocurrency app where you can create your user, check crypto prices and save them on your portfolio. The app was created aiming to be the first prototype of the final app to be presented to the Bank as a starting point.
 
+Project documentation can be found [/docs/index.html](/docs/index.html)
+
 ## What you will need to install this project on your computer:
 
 - Node
