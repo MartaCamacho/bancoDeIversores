@@ -1,4 +1,32 @@
-import { useState, useEffect } from 'react';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: screens/Portfolio.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: screens/Portfolio.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { useState, useEffect } from 'react';
 import {
     View,
     Text,
@@ -26,7 +54,7 @@ const Portfolio = ({navigation}) => {
 
     useEffect(() => {
       const ids = user.holdings.map((item) => { return item.id }).join(',');
-        const apiUrl = `https://api.coingecko.com/api/v3/coins/markets?vs_currency=${user.currency}&order=market_cap_desc&per_page=100&page=1&sparkline=true&price_change_percentage=7d&ids=${ids}`;
+        const apiUrl = `https://api.coingecko.com/api/v3/coins/markets?vs_currency=${user.currency}&amp;order=market_cap_desc&amp;per_page=100&amp;page=1&amp;sparkline=true&amp;price_change_percentage=7d&amp;ids=${ids}`;
         return axios({
             url: apiUrl,
             method: 'GET',
@@ -63,49 +91,49 @@ const Portfolio = ({navigation}) => {
       };
 
     return (
-        <View style={styles.body}> 
-            <View style={{ flex: 1, backgroundColor: COLORS.black}}>
-                <HeaderBar title="Portfolio"/>
-                {user.holdings.length > 0 ? <FlatList
+        &lt;View style={styles.body}> 
+            &lt;View style={{ flex: 1, backgroundColor: COLORS.black}}>
+                &lt;HeaderBar title="Portfolio"/>
+                {user.holdings.length > 0 ? &lt;FlatList
                     data={myHoldings}
                     keyExtractor={item => item.id}
                     contentContainerStyle={styles.listContainer}
                     ListHeaderComponent={
-                        <View>
-                          <Text style={styles.header}>
+                        &lt;View>
+                          &lt;Text style={styles.header}>
                           Your Assets
-                          </Text>
-                          <Text style={styles.tableHeaderItem}>
+                          &lt;/Text>
+                          &lt;Text style={styles.tableHeaderItem}>
                               Asset
-                              </Text>
-                              <Text style={[styles.tableHeaderItem, { textAlign: 'right' }]}>
+                              &lt;/Text>
+                              &lt;Text style={[styles.tableHeaderItem, { textAlign: 'right' }]}>
                               Price
-                              </Text>
-                          </View>
+                              &lt;/Text>
+                          &lt;/View>
                     }
                     renderItem={({item}) => {
                         let priceColor = item.price_change_percentage_7d_in_currency == 0 ? COLORS.lightGray3 :
                         item.price_change_percentage_7d_in_currency > 0 ? COLORS.lightGreen : COLORS.red;
-                        return <TouchableOpacity
+                        return &lt;TouchableOpacity
                         style={styles.tableContentItem}
                         onPress={() => seeCryptoDetails(item.name, item.symbol, item.id)}>
-                        <View style={styles.tableContentItemAlignment}>
-                            <Image 
+                        &lt;View style={styles.tableContentItemAlignment}>
+                            &lt;Image 
                                 source={{ uri: item.image}}
                                 style={{width: 20, height: 20}}
                             />
-                            <Text style={styles.coinName}>
+                            &lt;Text style={styles.coinName}>
                             {item.name}
-                            </Text>
-                            <View style={{ flex: 1, justifyContent: 'center'}}>
-                                <Text
+                            &lt;/Text>
+                            &lt;View style={{ flex: 1, justifyContent: 'center'}}>
+                                &lt;Text
                                 style={styles.currency}>
                                 {user.currency.toUpperCase()} {numbro(item?.current_price.toLocaleString()).format({thousandSeparated: true})}
-                                </Text>
-                                <View
+                                &lt;/Text>
+                                &lt;View
                                 style={styles.changeContainer}>
                                 {
-                                  item.price_change_percentage_7d_in_currency != 0 && <Image 
+                                  item.price_change_percentage_7d_in_currency != 0 &amp;&amp; &lt;Image 
                                   source={icons.upArrow}
                                   style={[styles.changePercentIcon, {
                                     tintColor: priceColor,
@@ -114,22 +142,22 @@ const Portfolio = ({navigation}) => {
                                   }]}
                                 />
                                 }
-                                <Text style={styles.changePercent}>
+                                &lt;Text style={styles.changePercent}>
                                   {item.price_change_percentage_7d_in_currency.toFixed(2)}%
-                                </Text>
-                                </View>
-                            </View>
-                        </View>
+                                &lt;/Text>
+                                &lt;/View>
+                            &lt;/View>
+                        &lt;/View>
 
-                        </TouchableOpacity>
+                        &lt;/TouchableOpacity>
                     }}
-                    /> : <View>
-                      <Text style={styles.noHoldingsMessage}>
-                      You have no holdings yet, check out the <Text style={styles.noHoldingsLink} onPress={() => navigation.navigate('Home')}>Top Crypto</Text> and save your favourites to see them here
-                      </Text>
-                    </View>}
-            </View>
-        </View>
+                    /> : &lt;View>
+                      &lt;Text style={styles.noHoldingsMessage}>
+                      You have no holdings yet, check out the &lt;Text style={styles.noHoldingsLink} onPress={() => navigation.navigate('Home')}>Top Crypto&lt;/Text> and save your favourites to see them here
+                      &lt;/Text>
+                    &lt;/View>}
+            &lt;/View>
+        &lt;/View>
     )
 }
   
@@ -196,4 +224,26 @@ const Portfolio = ({navigation}) => {
       ...FONTS.body5,
       lineHeight: 15
     }
-  })
+  })</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#CryptoDetailsScreen">CryptoDetailsScreen</a></li><li><a href="global.html#orderList">orderList</a></li><li><a href="global.html#TabNavigatorComponent">TabNavigatorComponent</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Thu Apr 28 2022 20:41:07 GMT+0200 (hora de verano de Europa central)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

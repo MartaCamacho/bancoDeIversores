@@ -1,6 +1,14 @@
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { COLORS, FONTS, SIZES } from '../../constants';
 
+/**
+ * Small text button
+ * @typedef PropType
+ * @property {String} label text
+ * @property {Object} [containerStyle] additional stylings
+ * @property {Function} onPress what button does when pressed
+ * @property {Boolean} active shows if the button is selected
+ */
 const TextButton = ({ label, containerStyle, onPress, active }) => {
   return (
     <TouchableOpacity style={[styles.container, {...containerStyle}, active && styles.buttonActive]} onPress={onPress}>

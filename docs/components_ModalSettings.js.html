@@ -1,4 +1,32 @@
-import { View, Text, Modal, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/ModalSettings.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/ModalSettings.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { View, Text, Modal, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
 import React from 'react';
 import ButtonComponent from './ButtonComponent';
 import { SIZES, COLORS } from '../../constants';
@@ -29,26 +57,26 @@ const ModalSettings = ({ modalOpen, closeModal, currentValue, newInputValue, tit
     keyboardInputType, isPassword, handleSave, newInputValue2, currentValue2, errorMessage,
     errorMessage2, onFocus, onFocus2, onBlur, onBlur2, customContent }) => {
 
-  const errorMessageText = (field) => <Text style={styles.errorMessage}>{field}</Text>;
+  const errorMessageText = (field) => &lt;Text style={styles.errorMessage}>{field}&lt;/Text>;
 
   const handleSubmit = () => {
-    if(errorMessage === '' && newInputValue !== '') {
+    if(errorMessage === '' &amp;&amp; newInputValue !== '') {
       handleSave();
       closeModal(false);
     }
   }
 
   return (
-    <Modal
+    &lt;Modal
           animationType='fade'
           visible={modalOpen}
           onRequestClose={() => closeModal(false)}
           >
-            <View style={styles.modal}>
+            &lt;View style={styles.modal}>
                 {customContent ? customContent() : 
-                <View style={styles.modalContent}>
-                    <Text style={styles.modalText}>Change {title}:</Text>
-                    <TextInput
+                &lt;View style={styles.modalContent}>
+                    &lt;Text style={styles.modalText}>Change {title}:&lt;/Text>
+                    &lt;TextInput
                     style={styles.textInput}
                     onChangeText={(text) => newInputValue(text)}
                     defaultValue={currentValue}
@@ -60,11 +88,11 @@ const ModalSettings = ({ modalOpen, closeModal, currentValue, newInputValue, tit
                     onFocus={onFocus}
                     onBlur={onBlur}
                     />
-                    {errorMessage ? errorMessageText(errorMessage) : <></>}
-                    {isPassword && 
-                    <>
-                        <Text style={[styles.modalText, {marginTop: 20}]}>Repeat {title}:</Text>
-                        <TextInput
+                    {errorMessage ? errorMessageText(errorMessage) : &lt;>&lt;/>}
+                    {isPassword &amp;&amp; 
+                    &lt;>
+                        &lt;Text style={[styles.modalText, {marginTop: 20}]}>Repeat {title}:&lt;/Text>
+                        &lt;TextInput
                         style={styles.textInput}
                         onChangeText={(text) => newInputValue2(text)}
                         defaultValue={currentValue2}
@@ -76,31 +104,31 @@ const ModalSettings = ({ modalOpen, closeModal, currentValue, newInputValue, tit
                         onFocus={onFocus2}
                         onBlur={onBlur2}
                         />
-                    </>
+                    &lt;/>
                     }
-                    {errorMessage2 ? errorMessageText(errorMessage2) : <></>}
-                </View>
+                    {errorMessage2 ? errorMessageText(errorMessage2) : &lt;>&lt;/>}
+                &lt;/View>
                     }
                 
-                <TouchableOpacity
+                &lt;TouchableOpacity
                 style={styles.saveButton}
                 >
-                    <View>
-                        <ButtonComponent
+                    &lt;View>
+                        &lt;ButtonComponent
                         title="Save"
                         color='#B0191E'
                         onPressFunction={() => handleSubmit()}
                         />
-                        <ButtonComponent
+                        &lt;ButtonComponent
                         title="Close"
                         style={styles.closeButtonContent}
                         color={COLORS.black}
                         onPressFunction={() => closeModal(false)}
                         />
-                    </View>
-                </TouchableOpacity>
-            </View>
-          </Modal>
+                    &lt;/View>
+                &lt;/TouchableOpacity>
+            &lt;/View>
+          &lt;/Modal>
   )
 }
 
@@ -148,4 +176,26 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: COLORS.white
     }
-})
+})</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#CryptoDetailsScreen">CryptoDetailsScreen</a></li><li><a href="global.html#orderList">orderList</a></li><li><a href="global.html#TabNavigatorComponent">TabNavigatorComponent</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Thu Apr 28 2022 20:41:07 GMT+0200 (hora de verano de Europa central)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

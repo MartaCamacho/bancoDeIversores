@@ -1,4 +1,32 @@
-import { View, Text, FlatList, TouchableOpacity, TextInput,
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/TopCryptoCurrency.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/TopCryptoCurrency.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { View, Text, FlatList, TouchableOpacity, TextInput,
   Image, StyleSheet, ActivityIndicator, Dimensions } from 'react-native';
 import {useState, useEffect, useRef} from 'react';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -35,7 +63,7 @@ const TopCryptoCurrency = ({ userCurrency, seeCryptoDetails }) => {
     const positive = isSorted ? 1 : -1;
     const negative = isSorted ? -1 : 1;
     coinList.sort(function(a, b){
-      if(a[item] < b[item]) { return negative; }
+      if(a[item] &lt; b[item]) { return negative; }
       if(a[item] > b[item]) { return positive; }
       return 0;
     });
@@ -48,7 +76,7 @@ const TopCryptoCurrency = ({ userCurrency, seeCryptoDetails }) => {
   const orderList = (order, page) => {
     const perPage = 50;
     setLoading(true);
-    const baseUrl = `https://api.coingecko.com/api/v3/coins/markets?vs_currency=${currencySymbol}&order=${order || 'market_cap_desc'}&per_page=${perPage}&page=${page || 1}&sparkline=true`;
+    const baseUrl = `https://api.coingecko.com/api/v3/coins/markets?vs_currency=${currencySymbol}&amp;order=${order || 'market_cap_desc'}&amp;per_page=${perPage}&amp;page=${page || 1}&amp;sparkline=true`;
     axios
       .get(baseUrl)
       .then((res) => {
@@ -63,53 +91,53 @@ const TopCryptoCurrency = ({ userCurrency, seeCryptoDetails }) => {
 
   const renderFilterButtons = () => {
     return ( 
-      <View style={styles.filtersTitle}>
-        <Text style={styles.filtersTitleText}>Sort by:</Text>
-        <View style={styles.pickerContainer}>
-          <Picker 
+      &lt;View style={styles.filtersTitle}>
+        &lt;Text style={styles.filtersTitleText}>Sort by:&lt;/Text>
+        &lt;View style={styles.pickerContainer}>
+          &lt;Picker 
           selectedValue={currentFilter} 
           ref={pickerRef}
           onValueChange={(itemValue, itemIndex) => itemValue === 'id' || itemValue === 'idReverse' ? [setCurrentFilter(itemValue), orderBy('id')] : setCurrentFilter(itemValue)}
           style={styles.dropdown}
           dropdownIconColor={COLORS.white}
           >
-            <Picker.Item label='Market cap' value='market_cap_desc' />
-            <Picker.Item label='Price' value='current_price' />
-            <Picker.Item label='Name Z-A' value='id'/>
-            <Picker.Item label='Name A-Z' value='idReverse'/>
-            <Picker.Item label='Volume' value='total_volume' />
-          </Picker>
-        </View>
-        <View style={styles.searchContainer}>
-          <TextInput
+            &lt;Picker.Item label='Market cap' value='market_cap_desc' />
+            &lt;Picker.Item label='Price' value='current_price' />
+            &lt;Picker.Item label='Name Z-A' value='id'/>
+            &lt;Picker.Item label='Name A-Z' value='idReverse'/>
+            &lt;Picker.Item label='Volume' value='total_volume' />
+          &lt;/Picker>
+        &lt;/View>
+        &lt;View style={styles.searchContainer}>
+          &lt;TextInput
           style={styles.searchInput}
           placeholder="Search..."
           placeholderTextColor="#858585"
-          onChangeText={(text) => text && setSearch(text)}
+          onChangeText={(text) => text &amp;&amp; setSearch(text)}
           />
-          <MaterialCommunityIcons name="magnify" size={20} color="#858585" style={styles.magnifyingGlass}/>
-        </View>
-      </View>
+          &lt;MaterialCommunityIcons name="magnify" size={20} color="#858585" style={styles.magnifyingGlass}/>
+        &lt;/View>
+      &lt;/View>
     )
   }
 
   const tableHeader = () => {
     return (
-      <View style={styles.tableListHeaderContainer}>
-          <Text style={{
+      &lt;View style={styles.tableListHeaderContainer}>
+          &lt;Text style={{
               flex: 1, 
               color: COLORS.lightGray3
               }}>
           Asset
-          </Text>
-          <Text style={{
+          &lt;/Text>
+          &lt;Text style={{
               flex: 1, 
               color: COLORS.lightGray3,
               textAlign: 'center' 
               }}>
           Price
-          </Text>
-          <Text style={{
+          &lt;/Text>
+          &lt;Text style={{
               flex: 1, 
               color: COLORS.lightGray3,
               textAlign: 'right' 
@@ -118,22 +146,22 @@ const TopCryptoCurrency = ({ userCurrency, seeCryptoDetails }) => {
               currentFilter === 'total_volume' ? 'Volume' :
               currentFilter === 'market_cap_desc' ? 'Market Cap' 
               : 'Filter'}
-          </Text>
-      </View>
+          &lt;/Text>
+      &lt;/View>
     )
   }
 
-  return (<>
-              <HeaderBar title="Top Crypto"/>
+  return (&lt;>
+              &lt;HeaderBar title="Top Crypto"/>
               {renderFilterButtons()}
                 {loading ? 
-                <View style={styles.spinnerContainer}>
-                  <ActivityIndicator size="large" color={COLORS.white}/> 
-                </View>
+                &lt;View style={styles.spinnerContainer}>
+                  &lt;ActivityIndicator size="large" color={COLORS.white}/> 
+                &lt;/View>
                 : 
-                <>
+                &lt;>
                 {tableHeader()}
-                <FlatList
+                &lt;FlatList
                       data={coinList.filter(
                         (coin) =>
                           coin.name.toLowerCase().includes(search.toLocaleLowerCase()) ||
@@ -150,28 +178,28 @@ const TopCryptoCurrency = ({ userCurrency, seeCryptoDetails }) => {
                         item.price_change_percentage_24h > 0 ? COLORS.lightGreen : COLORS.red;
 
                         return (
-                          <TouchableOpacity style={styles.coinListContainer}
+                          &lt;TouchableOpacity style={styles.coinListContainer}
                           onPress={() => seeCryptoDetails(item.name, item.symbol, item.id)}
                           >
-                          <View style={{ flex: 1, flexDirection: 'row', width: '33%' }}>
-                            <View style={{ width: 25 }}>
-                              <Image 
+                          &lt;View style={{ flex: 1, flexDirection: 'row', width: '33%' }}>
+                            &lt;View style={{ width: 25 }}>
+                              &lt;Image 
                               source={{uri: item.image}}
                               style={{ width: 20, height: 20 }}
                               />
-                            </View>
-                            <View style={{ flex: 1}}>
-                              <Text style={{
+                            &lt;/View>
+                            &lt;View style={{ flex: 1}}>
+                              &lt;Text style={{
                                 color: COLORS.white, 
                                 ...FONTS.h3
                               }}>
                                 {item.name}
-                              </Text>
-                            </View>
-                          </View>
+                              &lt;/Text>
+                            &lt;/View>
+                          &lt;/View>
                             
-                          <View style={styles.coinChartContainer}>
-                            <LineChart
+                          &lt;View style={styles.coinChartContainer}>
+                            &lt;LineChart
                                 withVerticalLabels={false}
                                 withHorizontalLabels={false}
                                 withDots={false}
@@ -191,10 +219,10 @@ const TopCryptoCurrency = ({ userCurrency, seeCryptoDetails }) => {
                                 bezier
                                 style={{paddingRight: 0}}
                             />
-                          </View>
+                          &lt;/View>
                           
-                          <View style={{ width: '33%' }}>
-                            <Text style={{ 
+                          &lt;View style={{ width: '33%' }}>
+                            &lt;Text style={{ 
                               textAlign: 'right',
                               color: COLORS.white,
                               ...FONTS.h4 }}>
@@ -203,15 +231,15 @@ const TopCryptoCurrency = ({ userCurrency, seeCryptoDetails }) => {
                               || currentFilter === 'market_cap_desc' ? 
                               numbro(item.market_cap).format({thousandSeparated: true}) : currentFilter === 'total_volume' ? 
                               numbro(item.total_volume).format({thousandSeparated: true}) : numbro(item.current_price).format({thousandSeparated: true}) }
-                            </Text>
-                            <View style={{
+                            &lt;/Text>
+                            &lt;View style={{
                               flexDirection: 'row',
                               alignItems: 'center',
                               justifyContent: 'flex-end'
                             }}
                             >
                               {
-                                currentFilter === 'current_price' && item.price_change_percentage_24h != 0 && <Image 
+                                currentFilter === 'current_price' &amp;&amp; item.price_change_percentage_24h != 0 &amp;&amp; &lt;Image 
                                 source={icons.upArrow}
                                 style={{
                                   height: 10,
@@ -222,26 +250,26 @@ const TopCryptoCurrency = ({ userCurrency, seeCryptoDetails }) => {
                                 }}
                               />
                               }
-                              {currentFilter === 'current_price' && <Text style={{
+                              {currentFilter === 'current_price' &amp;&amp; &lt;Text style={{
                                 marginLeft: 5,
                                 color: priceColor,
                                 ...FONTS.body5,
                                 lineHeight: 15
                               }}>
                                 {numbro(item?.price_change_percentage_24h?.toFixed(2)).format({thousandSeparated: true})}%
-                              </Text>}
-                            </View>
-                          </View>
-                          </TouchableOpacity>
+                              &lt;/Text>}
+                            &lt;/View>
+                          &lt;/View>
+                          &lt;/TouchableOpacity>
                         )
                       }}
                       ListFooterComponent={
-                        <View style={{ marginBottom: 50 }}></View>
+                        &lt;View style={{ marginBottom: 50 }}>&lt;/View>
                       }
                     />
-                    </>
+                    &lt;/>
                     }
-              </>
+              &lt;/>
   )
 }
 
@@ -314,4 +342,26 @@ const styles = StyleSheet.create({
     right: 2,
     bottom: 5,
   }
-})
+})</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#CryptoDetailsScreen">CryptoDetailsScreen</a></li><li><a href="global.html#orderList">orderList</a></li><li><a href="global.html#TabNavigatorComponent">TabNavigatorComponent</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Thu Apr 28 2022 20:41:07 GMT+0200 (hora de verano de Europa central)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

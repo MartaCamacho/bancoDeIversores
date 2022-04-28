@@ -7,7 +7,12 @@ import TopCryptoCurrency from '../components/TopCryptoCurrency';
 
 import { COLORS } from '../../constants';
 
-const Home = ({ navigation}) => {
+/**
+ * Home / Coin list page
+ * @typedef PropType
+ * @property {Object} navigation navigation object to change pages
+ */
+const Home = ({ navigation }) => {
     const { user } = useSelector(state => state.useReducer);
     const [ coins, setCoins ] = useState([]);
 

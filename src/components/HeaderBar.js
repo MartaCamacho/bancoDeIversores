@@ -1,6 +1,12 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { SIZES, COLORS, FONTS } from '../../constants';
 
+/**
+ * Generic header
+ * @typedef PropType
+ * @property {String} title button background color
+ */
+
 const HeaderBar = ({title}) => {
   return (
     <View style={styles.container}>

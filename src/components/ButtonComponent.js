@@ -1,19 +1,29 @@
 import { StyleSheet, Text, Pressable } from 'react-native';
 
-const ButtonComponent = (props) => {
+
+/**
+ * Button component
+ * @typedef PropType
+ * @property {Function} onPressFunction what the button does when clicked
+ * @property {String} color button background color
+ * @property {Object} [style] additional styilings
+ * @property {String} title text inside the button
+ */
+
+const ButtonComponent = ({ onPressFunction, color, style, title }) => {
   return (
     <Pressable
-            onPress={props.onPressFunction}
+            onPress={onPressFunction}
             hitSlop={{ top: 10, bottom: 10, right: 10, left: 10 }}
             android_ripple={{ color: '#00000050' }}
             style={({ pressed }) => [
-                { backgroundColor: pressed ? '#dddddd' : props.color },
+                { backgroundColor: pressed ? '#dddddd' : color },
                 styles.button,
-                { ...props.style }
+                { ...style }
             ]}
         >
             <Text style={styles.text}>
-                {props.title}
+                {title}
             </Text>
         </Pressable>
   )

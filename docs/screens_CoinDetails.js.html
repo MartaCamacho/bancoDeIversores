@@ -1,4 +1,32 @@
-import { StyleSheet, Text, View, ScrollView, 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: screens/CoinDetails.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: screens/CoinDetails.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { StyleSheet, Text, View, ScrollView, 
   ActivityIndicator, Image, Dimensions, TouchableOpacity } from 'react-native';
 import {useEffect, useState} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
@@ -64,7 +92,7 @@ const CoinDetails = ({ route }) => {
     const getPriceInfo = () => {
         setChartLoading(true);
         const now = Math.round((new Date()).getTime() / 1000);
-       axios.get(`https://api.coingecko.com/api/v3/coins/${route.params.coin.id}/market_chart/range?vs_currency=${route.params.coin.currency}&from=${now - timeframe}&to=${now}`)
+       axios.get(`https://api.coingecko.com/api/v3/coins/${route.params.coin.id}/market_chart/range?vs_currency=${route.params.coin.currency}&amp;from=${now - timeframe}&amp;to=${now}`)
         .then((response) => {
             const transformPrices = () => {
               const data = response.data ? response.data.prices.map((item) => {
@@ -85,49 +113,49 @@ const CoinDetails = ({ route }) => {
 
     const topButtons = () => {
         return (
-            <View style={styles.buttonsContainer}>
-                <TextButton 
+            &lt;View style={styles.buttonsContainer}>
+                &lt;TextButton 
                 label="1H"
                 onPress={() => updateChartData(3600)}
                 active={timeframe === 3600}
                 containerStyle={{marginTop: 5}}
                 />
-                <TextButton 
+                &lt;TextButton 
                 label="1D"
                 onPress={() => updateChartData(86400)}
                 active={timeframe === 86400}
                 containerStyle={{marginTop: 5}}
                 />
-                <TextButton 
+                &lt;TextButton 
                 label="1W"
                 onPress={() => updateChartData(604800)}
                 active={timeframe === 604800}
                 containerStyle={{marginTop: 5}}
                 />
-                <TextButton 
+                &lt;TextButton 
                 label="1M"
                 onPress={() => updateChartData(2629743)}
                 active={timeframe === 2629743}
                 containerStyle={{marginTop: 5}}
                 />
-                <TextButton 
+                &lt;TextButton 
                 label="1Y"
                 onPress={() => updateChartData(31556926)}
                 active={timeframe === 31556926}
                 containerStyle={{marginTop: 5}}
                 />
-            </View>
+            &lt;/View>
         )
     };
 
     const chart = () => {
         return (
             chartLoading ? 
-            <View style={styles.spinnerContainer}>
-                <ActivityIndicator size="large" color={COLORS.white}/> 
-            </View> 
-          :  coinPrices.length > 0 && <View style={styles.chartContainer}>
-            <LineChart
+            &lt;View style={styles.spinnerContainer}>
+                &lt;ActivityIndicator size="large" color={COLORS.white}/> 
+            &lt;/View> 
+          :  coinPrices.length > 0 &amp;&amp; &lt;View style={styles.chartContainer}>
+            &lt;LineChart
                 withDots={false}
                 withInnerLines={false}
                 withVerticalLines={false}
@@ -148,7 +176,7 @@ const CoinDetails = ({ route }) => {
                 bezier
                 style={{paddingRight: 0}}
             />
-            </View>
+            &lt;/View>
         )
     }
 
@@ -180,12 +208,12 @@ const CoinDetails = ({ route }) => {
     }
 
   return (
-    <View style={styles.body}>
-      <HeaderBar title={
-      <>
-        <View style={styles.headerContainer}>
-          <View style={styles.headerTitle}>
-              {detailsLoading ? <></> : <Image
+    &lt;View style={styles.body}>
+      &lt;HeaderBar title={
+      &lt;>
+        &lt;View style={styles.headerContainer}>
+          &lt;View style={styles.headerTitle}>
+              {detailsLoading ? &lt;>&lt;/> : &lt;Image
               source={{uri: coinDetails?.image?.small}}
               resizeMode='contain'
               style={{
@@ -193,33 +221,33 @@ const CoinDetails = ({ route }) => {
                   height: 25,
                   paddingHorizontal: 20
                   }}
-              /> }<Text style={styles.text}>{route.params.coin.name} </Text>
-          </View>
-          <TouchableOpacity style={styles.starStyles}>
+              /> }&lt;Text style={styles.text}>{route.params.coin.name} &lt;/Text>
+          &lt;/View>
+          &lt;TouchableOpacity style={styles.starStyles}>
               {coinInPortfolio ? 
-              <FontAwesome onPress={() => modifyHoldings(false)} name="star" size={24} color="white"/> :
-              <AntDesign onPress={() => modifyHoldings(true)} name="staro" size={24} color="white"/>}
-          </TouchableOpacity>
-        </View>
-      </>
+              &lt;FontAwesome onPress={() => modifyHoldings(false)} name="star" size={24} color="white"/> :
+              &lt;AntDesign onPress={() => modifyHoldings(true)} name="staro" size={24} color="white"/>}
+          &lt;/TouchableOpacity>
+        &lt;/View>
+      &lt;/>
       } /> 
       {topButtons()}
       {chart()}
       {
-        detailsLoading ? <></> : 
-        <View style={styles.descriptionContainer}>
-          <ScrollView contentContainerStyle={{ flexGrow: 1}}>
-              <Text style={styles.details}>Market Cap Rank: {coinDetails.market_cap_rank}</Text>
-              <Text style={styles.details}>Market Cap: {numbro(coinDetails?.market_data?.market_cap[user.currency]).format({thousandSeparated: true})} {user.currency.toUpperCase()}</Text>
-              <Text style={styles.details}>Current Price: {numbro(coinDetails?.market_data?.current_price[user.currency]).format({thousandSeparated: true})} {user.currency.toUpperCase()}</Text>
-              <Text style={styles.details}>Price Change Percent: {priceChangePercentPeriod()} %</Text>
-              <Text style={styles.description}>
+        detailsLoading ? &lt;>&lt;/> : 
+        &lt;View style={styles.descriptionContainer}>
+          &lt;ScrollView contentContainerStyle={{ flexGrow: 1}}>
+              &lt;Text style={styles.details}>Market Cap Rank: {coinDetails.market_cap_rank}&lt;/Text>
+              &lt;Text style={styles.details}>Market Cap: {numbro(coinDetails?.market_data?.market_cap[user.currency]).format({thousandSeparated: true})} {user.currency.toUpperCase()}&lt;/Text>
+              &lt;Text style={styles.details}>Current Price: {numbro(coinDetails?.market_data?.current_price[user.currency]).format({thousandSeparated: true})} {user.currency.toUpperCase()}&lt;/Text>
+              &lt;Text style={styles.details}>Price Change Percent: {priceChangePercentPeriod()} %&lt;/Text>
+              &lt;Text style={styles.description}>
               {coinDetails?.description?.en}
-              </Text>
-          </ScrollView>
-        </View>
+              &lt;/Text>
+          &lt;/ScrollView>
+        &lt;/View>
       }
-    </View>
+    &lt;/View>
   )
 }
 
@@ -286,4 +314,26 @@ const styles = StyleSheet.create({
         justifyContent: 'center', 
         alignItems: 'center'
       }
-})
+})</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#CryptoDetailsScreen">CryptoDetailsScreen</a></li><li><a href="global.html#orderList">orderList</a></li><li><a href="global.html#TabNavigatorComponent">TabNavigatorComponent</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Thu Apr 28 2022 20:41:07 GMT+0200 (hora de verano de Europa central)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
