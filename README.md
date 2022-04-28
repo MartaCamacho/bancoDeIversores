@@ -13,6 +13,7 @@ Project documentation can be found [/docs/index.html](/docs/index.html)
 
 - axios for networking.
 - expo for accessing the expo app and emulators
+- jsdoc for documentation
 - numbro to format currencies
 - prop-types to type-check our components exposed properties.
 - react-native-async-storage for saving the user data
@@ -31,6 +32,8 @@ Project documentation can be found [/docs/index.html](/docs/index.html)
 Run npm install once you have forked/cloned the repo
 
 Run expo start to start the development server
+
+Run npm run docs to see the documentation
 
 ## Folder structure
 
