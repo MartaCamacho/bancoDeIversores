@@ -1,6 +1,5 @@
 import { StyleSheet, Text, Pressable } from 'react-native';
 
-
 /**
  * Button component
  * @typedef PropType

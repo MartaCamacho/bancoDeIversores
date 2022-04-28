@@ -15,7 +15,7 @@ const CyptoStack = createStackNavigator();
 const AuthStack = createStackNavigator();
 
 /** Navigator to be used when logged in
-    @type {Object}
+  *  @type {Object}
 */
 const CryptoDetailsScreen = () => {
   return (
@@ -30,7 +30,7 @@ const CryptoDetailsScreen = () => {
 }
 
 /** General navigator bottom tab
-    @type {Object}
+ *   @type {Object}
 */
 const TabNavigatorComponent = () => {
   const { logged } = useSelector(state => state.useReducer);

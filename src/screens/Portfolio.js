@@ -114,7 +114,7 @@ const Portfolio = ({navigation}) => {
                                   }]}
                                 />
                                 }
-                                <Text style={styles.changePercent}>
+                                <Text style={[styles.changePercent, {color: priceColor}]}>
                                   {item.price_change_percentage_7d_in_currency.toFixed(2)}%
                                 </Text>
                                 </View>
@@ -192,7 +192,6 @@ const Portfolio = ({navigation}) => {
     },
     changePercent: {
       marginLeft: 5,
-      color: priceColor,
       ...FONTS.body5,
       lineHeight: 15
     }
