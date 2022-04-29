@@ -213,9 +213,6 @@ const CoinDetails = ({ route }) => {
               <Text style={styles.details}>Market Cap: {numbro(coinDetails?.market_data?.market_cap[user.currency]).format({thousandSeparated: true})} {user.currency.toUpperCase()}</Text>
               <Text style={styles.details}>Current Price: {numbro(coinDetails?.market_data?.current_price[user.currency]).format({thousandSeparated: true})} {user.currency.toUpperCase()}</Text>
               <Text style={styles.details}>Price Change Percent: {priceChangePercentPeriod()} %</Text>
-              <Text style={styles.description}>
-              {coinDetails?.description?.en}
-              </Text>
           </ScrollView>
         </View>
       }

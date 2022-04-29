@@ -102,7 +102,7 @@ const Login = ({ navigation }) => {
         />
         {passwordError.length > 0 && errorMessage(passwordError)}
         <Text style={styles.textLink}>
-          If you do not have an account, <Text style={{color: 'blue'}}
+          If you do not have an account, <Text style={styles.textLinkAnchor}
             onPress={() => navigation.navigate('Signup')}>
             signup
           </Text>
@@ -138,6 +138,11 @@ const styles = StyleSheet.create({
     maxWidth: '95%',
     marginTop: 10,
     marginBottom: 30
+  },
+  textLinkAnchor: {
+    color: '#fff',
+    fontWeight: '700',
+    textDecorationLine: 'underline'
   },
   logo: {
     width: 186,

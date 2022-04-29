@@ -145,7 +145,7 @@ const Signup = ({ navigation }) => {
         />
         {repeatPasswordError.length > 0 && errorMessage(repeatPasswordError)}
         <Text style={styles.textLink}>
-        Already have an account? <Text style={{color: 'blue'}}
+        Already have an account? <Text style={styles.textLinkAnchor}
             onPress={() => navigation.navigate('Login')}>
             Login
           </Text>
@@ -181,6 +181,11 @@ const styles = StyleSheet.create({
     maxWidth: '95%',
     marginTop: 10,
     marginBottom: 40
+  },
+  textLinkAnchor: {
+    color: '#fff',
+    fontWeight: '700',
+    textDecorationLine: 'underline'
   },
   logo: {
     width: 186,
